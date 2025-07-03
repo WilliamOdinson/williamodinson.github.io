@@ -17,7 +17,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mdx-js/loader": "~3.1.0",
-    "@mdx-js/react": "~3.1.0",
     "@next/mdx": "15.3.4",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.7",
@@ -43,7 +42,9 @@
     "typescript": "5.3.3"
   },
   "devDependencies": {
+    "@mdx-js/react": "~3.1.0",
     "@tailwindcss/typography": "~0.5.16",
+    "@types/mdx": "~2.0.13",
     "mdx": "~0.3.1",
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
