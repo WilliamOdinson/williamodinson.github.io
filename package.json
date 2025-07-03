@@ -1,0 +1,56 @@
+{
+  "name": "williamodinson.github.io",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "export": "next export",
+    "deploy": "pnpm build && pnpm export"
+  },
+  "homepage": "https://williamodinson.github.io",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mdx-js/loader": "~3.1.0",
+    "@next/mdx": "15.3.4",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-tooltip": "^1.0.7",
+    "@types/node": "20.11.19",
+    "@types/react": "18.2.55",
+    "@types/react-dom": "18.2.19",
+    "autoprefixer": "10.4.17",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.5",
+    "gray-matter": "~4.0.3",
+    "lucide-react": "^0.327.0",
+    "next": "15.3.4",
+    "postcss": "8.4.35",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-use": "^17.6.0",
+    "sharp": "^0.33.2",
+    "tailwind-merge": "^2.2.1",
+    "tailwindcss": "3.4.1",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "5.3.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "~0.5.16",
+    "prettier": "3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "remark-frontmatter": "~5.0.0",
+    "remark-mdx-frontmatter": "~5.2.0"
+  },
+  "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
+  }
+}
