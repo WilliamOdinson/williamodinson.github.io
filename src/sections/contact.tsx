@@ -15,22 +15,19 @@ export default function ContactSection() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    // extra FormSubmit params
-    data.append("_captcha", "false");
-    data.append("_subject", "New message from portfolio");
+    // Web3Forms parameter
+    data.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_KEY!);
 
     try {
       setStatus("sending");
-      const res = await fetch(
-        "https://formsubmit.co/earthsuperman@outlook.com",
-        {
-          method: "POST",
-          body: data,
-          headers: { Accept: "application/json" },
-        },
-      );
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
 
-      if (res.ok) {
+      const result = await res.json();
+      if (result.success) {
         setStatus("sent");
         form.reset();
       } else {
