@@ -3,19 +3,22 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { MdStar } from "react-icons/md";
-
 import type { Project } from "@/sections/projects";
 
 /**
- * Stagger-animated grid that shows each card with a smooth spring-in effect.
+ * Animated card grid that displays a list of featured projects.
  */
 export default function ProjectsGrid({ items }: { items: Project[] }) {
   const container = {
     hidden: {},
     visible: {
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
     },
   };
+
   const card = {
     hidden: { y: 24, opacity: 0 },
     visible: {
@@ -61,13 +64,18 @@ export default function ProjectsGrid({ items }: { items: Project[] }) {
             </p>
 
             {/* tag badge */}
-            <div className="mt-3 flex flex-wrap gap-2">
-              {p.tags.map((tag, i) => (
-                <span key={i} className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-                  {tag}
-                </span>
-              ))}
-            </div>
+            {p.tags.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {p.tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </Link>
         </motion.div>
       ))}
