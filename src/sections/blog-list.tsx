@@ -21,7 +21,7 @@ async function getFeaturedPosts(): Promise<Post[]> {
 
   const all = await Promise.all(
     dirEntries
-      .filter((e) => e.isDirectory())
+      .filter((e) => e.isDirectory() && !e.name.startsWith("["))
       .map(async (folder) => {
         const raw = await fs.readFile(
           path.join(baseDir, folder.name, "page.mdx"),
