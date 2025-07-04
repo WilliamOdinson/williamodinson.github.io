@@ -1,20 +1,24 @@
+// src/sections/projects.tsx
 import path from "path";
 import { promises as fs } from "fs";
 import matter from "gray-matter";
 
 import ProjectsGrid from "@/components/projects-grid";
 
-type Project = {
+/**
+ * Project metadata shape coming from front-matter.
+ */
+export type Project = {
   slug: string;
   title: string;
   description: string;
   stars: number;
-  language: string;
+  tags: string[];
 };
 
 /**
- * Read project metadata from the file system.
- * Runs only on the server, never in the browser bundle.
+ * Read every project folder's page.mdx and extract its front-matter.
+ * Runs only on the server during the build / request.
  */
 async function getProjects(): Promise<Project[]> {
   const base = path.join(process.cwd(), "src/app/projects");
@@ -22,7 +26,7 @@ async function getProjects(): Promise<Project[]> {
 
   const items = await Promise.all(
     entries
-      .filter((e) => e.isDirectory() && !e.name.startsWith("["))
+      .filter((dir) => dir.isDirectory() && !dir.name.startsWith("["))
       .map(async (dir) => {
         const raw = await fs.readFile(
           path.join(base, dir.name, "page.mdx"),
@@ -34,17 +38,18 @@ async function getProjects(): Promise<Project[]> {
           title: data.repo as string,
           description: data.description as string,
           stars: data.stars as number,
-          language: data.language as string,
+          tags: Array.isArray(data.tags) ? data.tags : [data.tags].filter(Boolean),
         };
       }),
   );
 
+  // sort by GitHub stars, descending
   return items.sort((a, b) => b.stars - a.stars);
 }
 
 /**
- * Server component. It renders the section shell and
- * delegates the animated grid to the client component.
+ * Server component - shells the section and leaves all animation
+ * to the client-side <ProjectsGrid/>.
  */
 export default async function FeaturedProjects() {
   const projects = await getProjects();
