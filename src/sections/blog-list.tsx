@@ -9,41 +9,46 @@ type Post = {
   title: string;
   summary: string;
   date: string;
+  featured: boolean;
 };
 
 /**
- * Read blog post front-matter from the file system.
+ * Read blog post front-matter and keep only items with `featured: true`.
  */
-async function getPosts(): Promise<Post[]> {
-  const base = path.join(process.cwd(), "src/app/blog");
-  const entries = await fs.readdir(base, { withFileTypes: true });
+async function getFeaturedPosts(): Promise<Post[]> {
+  const baseDir = path.join(process.cwd(), "src/app/blog");
+  const dirEntries = await fs.readdir(baseDir, { withFileTypes: true });
 
-  const posts = await Promise.all(
-    entries
+  const all = await Promise.all(
+    dirEntries
       .filter((e) => e.isDirectory())
-      .map(async (dir) => {
+      .map(async (folder) => {
         const raw = await fs.readFile(
-          path.join(base, dir.name, "page.mdx"),
+          path.join(baseDir, folder.name, "page.mdx"),
           "utf8",
         );
         const { data } = matter(raw);
         return {
-          slug: dir.name,
+          slug: folder.name,
           title: data.title as string,
           summary: data.summary as string,
           date: data.date as string,
-        };
+          featured: Boolean(data.featured),
+        } as Post;
       }),
   );
 
-  return posts.sort((a, b) => +new Date(b.date) - +new Date(a.date));
+  return all
+    .filter((p) => p.featured)
+    .sort((a, b) => +new Date(b.date) - +new Date(a.date));
 }
 
 /**
- * Server component wrapping the animated list.
+ * Server component: renders the blog section header
+ * and passes the data to the client-side animated list.
  */
 export default async function RecentPosts() {
-  const posts = await getPosts();
+  const posts = await getFeaturedPosts();
 
   return (
     <section className="my-16 space-y-8">
