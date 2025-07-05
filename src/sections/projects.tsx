@@ -57,7 +57,7 @@ async function getFeaturedProjects(): Promise<Project[]> {
 }
 
 /**
- * Server component – renders the section shell
+ * Server component, renders the section shell
  * and passes data to the client-side animated grid.
  */
 export default async function FeaturedProjects() {
