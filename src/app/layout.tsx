@@ -41,7 +41,9 @@ export default function RootLayout({
       <body className={montserrat.className}>
         <Header />
         <GridBackground />
-        <main className="container overflow-x-hidden lg:px-28">{children}</main>
+        <main className="container overflow-x-hidden pt-20 lg:px-28">
+          {children}
+        </main>
         <BackToTop />
       </body>
     </html>
