@@ -17,7 +17,7 @@ const nav = [
 export default function Header() {
   return (
     <>
-      <nav className="justify-centerpy-2 flex w-full select-none pt-6 font-light md:px-28 md:pb-2">
+      <nav className="fixed left-0 top-0 z-50 flex w-full select-none justify-center bg-background/80 py-4 font-light backdrop-blur md:px-28">
         <div className="container flex flex-col items-center justify-between md:flex-row">
           <div
             className={cn(
