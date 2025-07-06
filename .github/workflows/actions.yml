@@ -18,27 +18,42 @@ jobs:
       NEXT_PUBLIC_WEB3FORMS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_KEY }}
 
     steps:
+      # 1. grab the source
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. restore the incremental compiler output that Next.js keeps in .next/cache
+      - name: Restore Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]sx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
+      # 3. install pnpm itself (the action just drops the executable)
       - name: Set up pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 10.6.1
           run_install: false
 
+      # 4. install Node and enable the built-in pnpm-store cache
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
+      # 5. install project packages
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # 6. compile and export the site
       - name: Build website
         run: pnpm run build
 
+      # 7. push the static out/ folder to the Pages artifact store
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
