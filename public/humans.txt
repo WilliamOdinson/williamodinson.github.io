@@ -1,0 +1,26 @@
+/* TEAM */
+Developer:  Yiqing (William) Sun (孙逸青)
+Role:       Full-stack Developer • Designer • Content Author
+Location:   Pittsburgh, Pennsylvania, United States of America
+Email:      earthsuperman@outlook.com
+GitHub:     https://github.com/williamodinson
+LinkedIn:   https://linkedin.com/in/williamodinson
+
+/* SITE */
+Stack:      Next.js 15 • React 18 • TypeScript 5 • Tailwind CSS 3.4
+            shadcn/ui • Framer Motion 11 • MDX • Mermaid • pnpm 10
+Hosting:    GitHub Pages
+Design:     Responsive, dark-mode first, accessible (WCAG 2.1 AA)
+
+/* PROJECT */
+Repository: https://github.com/WilliamOdinson/williamodinson.github.io
+License:    MIT
+Launched:   2025-07-02
+
+/* THANKS */
+Icons:      Font Awesome 6, Lucide React
+Fonts:      Montserrat (Google Fonts), GoldenSignature (local)
+UI Lib:     Radix UI
+Special ▲:  Community contributors & open-source maintainers
+
+/* END */
