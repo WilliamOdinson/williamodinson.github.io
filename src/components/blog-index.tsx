@@ -36,7 +36,6 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
     <section className="space-y-8">
       {/* heading + search */}
       <header className="space-y-4">
-        <h2 className="text-2xl font-bold dark:text-white">Blog</h2>
         <p className="text-muted-foreground">
           Articles on System Design. Search by title or summary.
         </p>
@@ -68,7 +67,7 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
         {filtered.map((p) => (
           <motion.li key={p.slug} variants={item} className="py-2.5">
             <section className="flex flex-col gap-1 md:flex-row md:gap-9">
-              <time className="shrink-0 text-muted-foreground md:w-28">
+              <time className="shrink-0 text-sm text-muted-foreground md:w-40 md:text-base">
                 {new Intl.DateTimeFormat("en-US", {
                   month: "short",
                   day: "2-digit",
@@ -77,7 +76,8 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
               </time>
               <Link
                 href={`/blog/${p.slug}`}
-                className="no-underline hover:text-blue-600 dark:hover:text-blue-400"
+                className="text-base no-underline transition-colors hover:text-blue-600 dark:text-white
+                dark:hover:text-blue-400 md:text-base md:text-lg"
               >
                 {p.title}
               </Link>

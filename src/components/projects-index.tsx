@@ -50,9 +50,9 @@ export default function ProjectsIndex({ items }: { items: ProjectMeta[] }) {
           <motion.li key={p.slug} variants={row}>
             <section className="flex flex-col items-start gap-1 md:flex-row md:gap-8">
               {/* date column */}
-              <h2 className="shrink-0 text-xs leading-6 text-muted-foreground md:w-40 md:text-sm">
+              <span className="shrink-0 text-sm text-muted-foreground md:w-40 md:text-base">
                 {period}
-              </h2>
+              </span>
 
               {/* right-hand column */}
               <div className="flex flex-1 flex-col gap-0">
@@ -82,7 +82,7 @@ export default function ProjectsIndex({ items }: { items: ProjectMeta[] }) {
                 {/* cover image */}
                 <Link
                   href={`/projects/${p.slug}`}
-                  className="mx-auto block h-[338px] w-[600px] overflow-hidden rounded-xl"
+                  className="mx-auto block w-full overflow-hidden rounded-xl md:h-[338px] md:w-[600px]"
                 >
                   <Image
                     src={imgSrc}
