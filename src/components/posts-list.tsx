@@ -47,10 +47,10 @@ export default function PostsList({ items }: { items: Post[] }) {
           <Link
             href={`/blog/${p.slug}`}
             className="hover-lift -mx-4 block rounded-lg p-4 transition-all
-                       hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                       hover:bg-secondary"
           >
             <div className="flex items-start gap-4">
-              <time className="w-30 mt-1 flex-shrink-0 text-sm text-gray-500 dark:text-gray-400">
+              <time className="w-30 mt-1 flex-shrink-0 text-sm text-muted-foreground">
                 {new Intl.DateTimeFormat("en-US", {
                   year: "numeric",
                   month: "long",
@@ -61,7 +61,7 @@ export default function PostsList({ items }: { items: Post[] }) {
                 <h3 className="text-xl font-semibold transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
                   {p.title}
                 </h3>
-                <p className="mt-2 line-clamp-2 text-gray-600 dark:text-gray-400">
+                <p className="mt-2 line-clamp-2 text-muted-foreground">
                   {p.summary}
                 </p>
               </div>

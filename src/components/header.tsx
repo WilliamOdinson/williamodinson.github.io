@@ -3,6 +3,7 @@
 import Link from "next/link";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
+import ThemeToggle from "@/components/theme-toggle";
 
 const goldenSignature = localFont({
   src: "../assets/GoldenSignature.otf",
@@ -16,18 +17,23 @@ const nav = [
 
 export default function Header() {
   return (
-    <>
-      <nav className="fixed left-0 top-0 z-50 flex w-full select-none justify-center bg-background/80 py-4 font-light backdrop-blur md:px-28">
-        <div className="container flex flex-col items-center justify-between md:flex-row">
-          <div
-            className={cn(
-              "text-5xl drop-shadow-2xl",
-              goldenSignature.className,
-            )}
-          >
-            <Link href="/">William Sun</Link>
-          </div>
+    <nav
+      className="
+        fixed left-0 top-0 z-50 flex w-full select-none justify-center
+        bg-background/80 py-4 font-light backdrop-blur md:px-28
+      "
+    >
+      {/* Container keeps content centered and sets row layout on md+ screens */}
+      <div className="container flex flex-col items-center justify-between md:flex-row">
+        {/* Logo / site title */}
+        <div
+          className={cn("text-5xl drop-shadow-2xl", goldenSignature.className)}
+        >
+          <Link href="/">William Sun</Link>
+        </div>
 
+        {/* Right side: nav links + theme toggle */}
+        <div className="flex items-center gap-x-4">
           <div className="nav-links flex gap-x-8 text-xs md:text-base">
             {nav.map(({ label, href }) => (
               <Link key={href} href={href} className="cursor-pointer">
@@ -35,8 +41,11 @@ export default function Header() {
               </Link>
             ))}
           </div>
+
+          {/* Dark / light switch */}
+          <ThemeToggle />
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 }
