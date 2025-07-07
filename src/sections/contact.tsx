@@ -118,10 +118,9 @@ function FloatingInput({
         placeholder=" "
         required
         className="
-          peer w-full rounded-md border border-gray-300 bg-transparent
-          px-4 py-3 text-sm text-gray-900
+          peer w-full rounded-md border border-border bg-transparent
+          px-4 py-3 text-sm text-foreground
           focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary
-          dark:border-gray-700 dark:text-gray-100 dark:focus:border-primary
         "
       />
       <Label htmlFor={id}>{label}</Label>
@@ -149,10 +148,9 @@ function FloatingTextarea({
         placeholder=" "
         required
         className="
-          peer w-full resize-none rounded-md border border-gray-300 bg-transparent
-          px-4 py-3 text-sm text-gray-900
-          focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary
-          dark:border-gray-700 dark:text-gray-100 dark:focus:border-primary
+          focus:outline-nonef peer w-full resize-none rounded-md border border-border
+          bg-transparent px-4 py-3 text-sm
+          text-foreground focus:border-primary
         "
       />
       <Label htmlFor={id}>{label}</Label>
@@ -166,11 +164,10 @@ function Label({ htmlFor, children }: { htmlFor: string; children: string }) {
       htmlFor={htmlFor}
       className="
         pointer-events-none absolute left-4 top-1/2 origin-[0]
-        -translate-y-1/2 select-none text-gray-500 transition-all
+        -translate-y-1/2 select-none text-muted-foreground transition-all
         peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base
         peer-focus:top-2 peer-focus:text-xs peer-focus:text-primary
         peer-[:not(:placeholder-shown)]:hidden
-        dark:text-gray-400
       "
     >
       {children}

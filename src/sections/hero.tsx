@@ -1,34 +1,54 @@
+"use client";
+
 import Link from "next/link";
 
 import ContactList from "@/components/contact-list";
 import MotionText from "@/components/motion-text";
 import MotionDiv from "@/components/motion-div";
-
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 
 export default function Hero() {
   return (
     <section className="my-8 flex flex-col items-center justify-center">
-      {/* Greeting line */}
+      {/* Greeting */}
       <h1 className="mb-4 text-[1.4rem] md:text-[2rem]">
-        <MotionText delayOffset={0}>Hi, I'm Yiqing (William) Sun! 👋</MotionText>
+        <MotionText delayOffset={0}>
+          Hi, I'm Yiqing (William) Sun! 👋
+        </MotionText>
       </h1>
 
       {/* Animoji video avatar */}
-      <div className="overflow-hidden rounded-full p-3 md:p-4">
-        <MotionDiv>
-          <video
-            className="h-[170px] w-[170px] md:h-[190px] md:w-[190px]"
-            muted
-            autoPlay
-            loop
-            playsInline
-          >
-            <source src="/animoji.mp4" type="video/mp4" />
-            {/* Fallback text for browsers without video support */}
-            Your browser does not support the video tag.
-          </video>
+      <div className="relative overflow-hidden rounded-full p-3 md:p-4">
+        <MotionDiv className="relative">
+          <>
+            {/* light version visible by default, hidden in dark mode */}
+            <video
+              className="
+                h-[170px] w-[170px] opacity-100 dark:opacity-0
+                md:h-[190px] md:w-[190px]
+              "
+              muted
+              autoPlay
+              loop
+              playsInline
+              src="/animoji-light.mp4"
+            />
+
+            {/* dark version hidden in light, visible in dark */}
+            <video
+              className="
+                absolute left-0 top-0
+                h-[170px] w-[170px] opacity-0 dark:opacity-100
+                md:h-[190px] md:w-[190px]
+              "
+              muted
+              autoPlay
+              loop
+              playsInline
+              src="/animoji-dark.mp4"
+            />
+          </>
         </MotionDiv>
       </div>
 

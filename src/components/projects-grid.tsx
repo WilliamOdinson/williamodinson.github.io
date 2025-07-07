@@ -41,9 +41,9 @@ export default function ProjectsGrid({ items }: { items: Project[] }) {
           <Link
             href={`/projects/${p.slug}`}
             title={`Visit ${p.title}`}
-            className="hover-lift focus-ring group block rounded-lg border border-gray-200
-                       bg-white p-4 transition-all duration-200 hover:border-gray-300
-                       dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600"
+            className="hover-lift focus-ring group block rounded-lg border border-border
+                       bg-card p-4 transition-all duration-200
+                       hover:border-muted"
           >
             {/* title + stars */}
             <div className="mb-2 flex items-start justify-between">
@@ -52,14 +52,14 @@ export default function ProjectsGrid({ items }: { items: Project[] }) {
               </h3>
 
               {/* star counter with Material icon */}
-              <span className="flex items-center gap-1 text-xs dark:text-gray-500">
+              <span className="flex items-center gap-1 text-xs text-muted-foreground">
                 {p.stars}
                 <MdStar className="h-4 w-4 fill-yellow-400" />
               </span>
             </div>
 
             {/* description */}
-            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               {p.description}
             </p>
 
@@ -69,7 +69,7 @@ export default function ProjectsGrid({ items }: { items: Project[] }) {
                 {p.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                    className="inline-block rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-muted-foreground"
                   >
                     {tag}
                   </span>
