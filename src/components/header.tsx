@@ -33,8 +33,8 @@ export default function Header() {
         </div>
 
         {/* Right side: nav links + theme toggle */}
-        <div className="flex items-center gap-x-4">
-          <div className="nav-links flex gap-x-8 text-xs md:text-base">
+        <div className="flex items-center gap-x-8">
+          <div className="nav-links flex gap-x-8 font-semibold md:text-base">
             {nav.map(({ label, href }) => (
               <Link key={href} href={href} className="cursor-pointer">
                 {label}
