@@ -70,6 +70,7 @@
   * {
     @apply scroll-smooth border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -84,10 +85,12 @@ h1 {
   font-size: 2rem;
   font-weight: 700;
 }
+
 h2 {
   font-size: 1.75rem;
   font-weight: 700;
 }
+
 h3 {
   font-size: 1.25rem;
   font-weight: 700;
@@ -99,10 +102,11 @@ h3 {
   }
 
   /* underline-on-hover for top-nav links */
-  .nav-links > * {
+  .nav-links>* {
     @apply relative;
   }
-  .nav-links > *::after {
+
+  .nav-links>*::after {
     content: "";
     position: absolute;
     left: 0;
@@ -112,26 +116,34 @@ h3 {
     background: black;
     transition: width 0.2s ease-out;
   }
-  .nav-links > *:hover::after {
+
+  .nav-links>*:hover::after {
     width: 100%;
   }
 }
 
 @layer utilities {
+
   /* Slight lift and shadow on hover */
   .hover-lift {
     @apply transition-transform duration-200 ease-linear;
   }
+
   .hover-lift:hover {
-    @apply -translate-y-1 shadow-lg; /* -translate-y-1 ≈ -4 px */
+    @apply -translate-y-1 shadow-lg;
+    /* -translate-y-1 ≈ -4 px */
   }
 
   /* Accessible focus ring (matches shadcn/ui buttons) */
   .focus-ring {
-    @apply focus-visible:outline-none
-           focus-visible:ring-2
-           focus-visible:ring-ring
-           focus-visible:ring-offset-2
-           focus-visible:ring-offset-background;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .safari-mask-fix {
+    /* Forces a new compositor path in WebKit */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
   }
 }

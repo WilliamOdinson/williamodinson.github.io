@@ -19,7 +19,7 @@ export default function Hero() {
       </h1>
 
       {/* Animoji video avatar */}
-      <div className="relative overflow-hidden rounded-full p-3 md:p-4">
+      <div className="safari-mask-fix relative overflow-hidden rounded-full p-3 md:p-4">
         <MotionDiv className="relative">
           <>
             {/* light version visible by default, hidden in dark mode */}
@@ -32,6 +32,7 @@ export default function Hero() {
               autoPlay
               loop
               playsInline
+              style={{ backgroundColor: "transparent" }}
               src="/animoji-light.mp4"
             />
 
@@ -46,6 +47,7 @@ export default function Hero() {
               autoPlay
               loop
               playsInline
+              style={{ backgroundColor: "transparent" }}
               src="/animoji-dark.mp4"
             />
           </>
