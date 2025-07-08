@@ -7,6 +7,7 @@ import BackToTop from "@/components/back-to-top";
 import GridBackground from "@/components/grid-background";
 import { ThemeProvider } from "@/components/theme-provider";
 import Script from "next/script";
+import Footer from "@/components/footer";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -46,7 +47,7 @@ export default function RootLayout({
        theme-preload script toggling .dark before React mounts */
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Early theme detection (runs before any React/Next code) */}
+        {/* theme detection */}
         <Script id="theme-init" strategy="beforeInteractive">
           {`
             (function () {
@@ -59,17 +60,21 @@ export default function RootLayout({
             })();
           `}
         </Script>
+
+        {/* Resource discovery links */}
+        <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+        <link rel="author" type="text/plain" href="/humans.txt" />
+        <link rel="robots" href="/robots.txt" />
       </head>
 
       <body className={montserrat.className}>
         <ThemeProvider>
           <Header />
           <GridBackground />
-
           <main className="container overflow-x-hidden pt-20 lg:px-28">
             {children}
           </main>
-
+          <Footer />
           <BackToTop />
         </ThemeProvider>
       </body>

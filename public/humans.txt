@@ -11,6 +11,7 @@ Stack:      Next.js 15 • React 18 • TypeScript 5 • Tailwind CSS 3.4
             shadcn/ui • Framer Motion 11 • MDX • Mermaid • pnpm 10
 Hosting:    GitHub Pages
 Design:     Responsive, dark-mode first, accessible (WCAG 2.1 AA)
+Sitemap:    https://williamodinson.github.io/sitemap.xml
 
 /* PROJECT */
 Repository: https://github.com/WilliamOdinson/williamodinson.github.io
