@@ -10,10 +10,17 @@ export default function GiscusComments() {
   useEffect(() => {
     if (!container.current) return;
 
+    const initialTheme = document.documentElement.classList.contains("dark")
+      ? "dark"
+      : "light";
+
+    if (container.current.querySelector("script[data-giscus]")) return;
+
     const s = document.createElement("script");
     s.src = "https://giscus.app/client.js";
     s.async = true;
     s.setAttribute("crossorigin", "anonymous");
+    s.setAttribute("data-giscus", "");
 
     s.setAttribute("data-repo", "WilliamOdinson/williamodinson.github.io");
     s.setAttribute("data-repo-id", "R_kgDOPGBcbA");
@@ -27,7 +34,8 @@ export default function GiscusComments() {
     s.setAttribute("data-input-position", "bottom");
     s.setAttribute("data-loading", "lazy");
 
-    s.setAttribute("data-theme", "preferred_color_scheme");
+    s.setAttribute("data-theme", initialTheme);
+
     s.setAttribute("data-lang", "en");
 
     container.current.appendChild(s);
