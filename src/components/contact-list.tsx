@@ -8,7 +8,7 @@ import {
   faLinkedin,
   faXTwitter,
   faTiktok,
-  faInstagram,
+  faSteam,
 } from "@fortawesome/free-brands-svg-icons";
 
 import MotionList from "./motion-list";
@@ -43,17 +43,11 @@ const contacts: Contact[] = [
     color: "#EA4335",
   },
   {
-    name: "X (not registered yet)",
-    href: "https://twitter.com/",
+    name: "X",
+    href: "https://x.com/william18652",
     icon: faXTwitter,
     color: "#000000",
     colorDark: "#FFFFFF",
-  },
-  {
-    name: "Instagram (not registered yet)",
-    href: "https://instagram.com/",
-    icon: faInstagram,
-    color: "#E4405F",
   },
   {
     name: "GitHub",
@@ -72,6 +66,13 @@ const contacts: Contact[] = [
     name: "TikTok",
     href: "https://tiktok.com/@william18652",
     icon: faTiktok,
+    color: "#000000",
+    colorDark: "#FFFFFF",
+  },
+  {
+    name: "Steam",
+    href: "https://steamcommunity.com/profiles/76561199087095739/",
+    icon: faSteam,
     color: "#000000",
     colorDark: "#FFFFFF",
   },
