@@ -83,7 +83,16 @@ export default function Hero() {
       {/* Résumé download button */}
       <MotionDiv delayOffset={1.6}>
         <Button asChild>
-          <Link href="/Resume.pdf" target="_blank" rel="noopener noreferrer">
+          <Link
+            href={
+              "https://docs.google.com/gview?embedded=1&url=" +
+              encodeURIComponent(
+                "https://github.com/WilliamOdinson/williamodinson.github.io/releases/latest/download/resume.pdf",
+              )
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Eye className="mr-2 h-4 w-4" />
             View My Résumé
           </Link>
