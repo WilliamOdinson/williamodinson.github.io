@@ -14,34 +14,17 @@ export default function about() {
         <article className="flex flex-col gap-4">
           <MotionDiv delayOffset={0.4}>
             <p>
-              Hello, I'm William Sun and my Chinese name is
-              <span className="whitespace-nowrap">
-                {" "}
-                孙逸青 (Soo-n Ee-ching, Sūn Yì qīng)
-              </span>
-              . I'm a full-stack software developer based in Pittsburgh, PA.
+              Hi, I'm William (Yiqing) Sun, a software engineer and current Master's student at Carnegie Mellon University.
             </p>
           </MotionDiv>
           <MotionDiv delayOffset={0.5}>
             <p>
-              I graduated from Tianjin University as an Outstanding Graduate,
-              earning a Bachelor of Management in Information Management and
-              Information Systems. Passionate about the intersection of
-              technology and business, I enjoy building software{" "}
-              <em>(primarily under the MIT License)</em> that solves real-world
-              problems and enhances user experiences.
+              I build backend and cloud-native systems, mostly in Go and Python, with a focus on performance and distributed architecture. At CMU's School of Computer Science, I TA the 15-619 Cloud Computing course, where I design projects that take students through real production challenges: large-scale data pipelines, Kubernetes deployments, and high-throughput service optimization.
             </p>
           </MotionDiv>
           <MotionDiv delayOffset={0.6}>
             <p>
-              Professionally, I&rsquo;ve thrived in both corporate and tech
-              environments. As a Data Analysis Intern at Ernst &amp; Young, I
-              deployed advanced analytics to streamline financial-audit
-              workflows. Later, at Shanghai Mingchen Mould &amp; Plastic
-              Technology, I shifted my focus to software development and
-              cross-functional project coordination. These roles deepened my
-              understanding of data-science principles and sharpened my ability
-              to translate technical insight for stakeholders of all kinds.
+              I grew up in China, studied Information Systems at Tianjin University, and have been writing software ever since. Most of my work is open source under the MIT License.
             </p>
           </MotionDiv>
         </article>
