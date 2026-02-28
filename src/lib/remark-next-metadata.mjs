@@ -14,8 +14,9 @@
  *  - alternates (canonical)
  */
 import matter from "gray-matter";
+import { author, site } from "./site.config.mjs";
 
-const BASE_URL = "https://williamodinson.github.io";
+const BASE_URL = site.url;
 
 /* ------------------------------------------------------------------ */
 /*  Minimal valueToEstree (avoids adding estree-util-value-to-estree) */
@@ -87,7 +88,7 @@ function buildMetadata(data, urlPath) {
     title,
     description,
     type: "article",
-    siteName: "Yiqing Sun",
+    siteName: author.name,
   };
 
   if (urlPath) {

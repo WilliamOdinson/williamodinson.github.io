@@ -6,6 +6,7 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRss, faRobot, faUser } from "@fortawesome/free-solid-svg-icons";
+import { author } from "@/lib/site.config.mjs";
 
 export default function Footer() {
   return (
@@ -35,7 +36,7 @@ export default function Footer() {
         </a>
       </p>
 
-      <p>© {new Date().getFullYear()} Yiqing Sun</p>
+      <p>© {new Date().getFullYear()} {author.name}</p>
     </footer>
   );
 }

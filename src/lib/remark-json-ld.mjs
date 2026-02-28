@@ -13,12 +13,13 @@
  * Uses `gray-matter` for YAML parsing (already a project dependency).
  */
 import matter from "gray-matter";
+import { author, site } from "./site.config.mjs";
 
-const BASE_URL = "https://williamodinson.github.io";
+const BASE_URL = site.url;
 
 const AUTHOR = {
   "@type": "Person",
-  name: "Yiqing Sun",
+  name: author.name,
   url: BASE_URL,
 };
 

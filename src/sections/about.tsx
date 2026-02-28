@@ -6,6 +6,7 @@
 import CoolPortraitCard from "@/components/cool-portrait-card";
 import Image from "next/image";
 import MotionDiv from "@/components/motion-div";
+import { author } from "@/lib/site.config.mjs";
 
 export default function About() {
   return (
@@ -21,7 +22,7 @@ export default function About() {
         <article className="flex flex-col gap-4">
           <MotionDiv delayOffset={0.4}>
             <p>
-              Hi, I'm William (Yiqing) Sun, a software engineer and current
+              Hi, I'm {author.name}, a software engineer and current
               Master's student at Carnegie Mellon University.
             </p>
           </MotionDiv>
@@ -51,7 +52,7 @@ export default function About() {
           {/* Desktop: 3D tilt card */}
           <CoolPortraitCard className="hidden lg:block">
             <Image src="/selfie.jpg"
-              alt="Portrait of Yiqing Sun"
+              alt={author.image.alt}
               width={350}
               height={438}
               className="w-[350px] min-w-[300px] rounded-xl transition-all"
@@ -59,7 +60,7 @@ export default function About() {
           </CoolPortraitCard>
           {/* Mobile: simple hover-scale */}
           <Image src="/selfie.jpg"
-            alt="Portrait of Yiqing Sun"
+            alt={author.image.alt}
             width={350}
             height={438}
             className="w-[350px] min-w-[300px] rounded-xl transition-all hover:rotate-3 hover:scale-105 lg:hidden"
