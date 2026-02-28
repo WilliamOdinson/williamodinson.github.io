@@ -1,3 +1,8 @@
+/**
+ * PostsList: Animated vertical list of blog post summary cards.
+ * Used on the homepage to display featured/recent posts.
+ * Each row reveals with a staggered spring animation when scrolled into view.
+ */
 "use client";
 
 import Link from "next/link";
@@ -10,30 +15,28 @@ type Post = {
   date: string;
 };
 
-/**
- * Animated vertical list of blog post summaries.
- * Each row appears with a small staggered delay.
- */
+/** Stagger timing for the list container. */
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+/** Slide-up animation for each individual row. */
+const rowVariants = {
+  hidden: { y: 16, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { type: "spring", stiffness: 180, damping: 20 },
+  },
+};
+
 export default function PostsList({ items }: { items: Post[] }) {
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.15,
-      },
-    },
-  };
-
-  const rowVariants = {
-    hidden: { y: 16, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 180, damping: 20 },
-    },
-  };
-
   return (
     <motion.ul
       className="space-y-6"

@@ -1,3 +1,11 @@
+/**
+ * CodeBlock: Custom `<pre>` override for MDX code fences.
+ *
+ * Features:
+ *  - Syntax highlighting via react-syntax-highlighter (Prism).
+ *  - Theme-aware: switches between one-dark / one-light.
+ *  - Copy-to-clipboard button (styles in globals.css `.copy-btn`).
+ */
 "use client";
 
 import { ReactElement, useState } from "react";
@@ -8,22 +16,25 @@ import oneDark from "react-syntax-highlighter/dist/esm/styles/prism/one-dark";
 import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/one-light";
 
 export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
+  // MDX wraps fenced code in <pre><code className="language-X">…</code></pre>
   const child = props.children as ReactElement<{
     className?: string;
     children: string;
   }>;
 
-  /* MDX always passes the literal code as a string in child.props.children */
+  /** The raw source code string. */
   const rawCode =
     typeof child?.props?.children === "string"
       ? child.props.children.trimEnd()
       : "";
 
+  /** Extract the language identifier (e.g. "tsx") from the className. */
   const langMatch = /language-(\w+)/.exec(child?.props.className ?? "");
   const language = langMatch ? langMatch[1] : "";
 
   const [copied, setCopied] = useState(false);
 
+  /** Write code to the system clipboard and flash a "Copied!" state. */
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(rawCode);
@@ -39,16 +50,11 @@ export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
 
   return (
     <div className="relative my-4">
-      {/* Syntax‑highlighted code */}
       <SyntaxHighlighter
-        /* important: passing the language enables color! */
         language={language}
-        /* built‑in inline styles theme */
         style={prismTheme}
-        /* personal tweaks */
         showLineNumbers={false}
         wrapLines
-        useInlineStyles /* default, but explicit for clarity */
         customStyle={{
           margin: 0,
           borderRadius: "0.5rem",
@@ -59,29 +65,27 @@ export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
           background: "transparent",
         }}
         codeTagProps={{
-          style: {
-            fontFamily: "Menlo, Roboto Mono, monospace",
-          },
+          style: { fontFamily: "Menlo, Roboto Mono, monospace" },
         }}
       >
         {rawCode}
       </SyntaxHighlighter>
 
-      {/* copy button */}
+      {/* Copy button: styles live in globals.css (.copy-btn) */}
       <button
         type="button"
-        className="copy"
+        className="copy-btn"
         onClick={handleCopy}
         data-copied={copied}
         aria-label={copied ? "Copied!" : "Copy to clipboard"}
       >
         <span
-          className="tooltip"
+          className="copy-tooltip"
           data-text-initial="Copy to clipboard"
           data-text-end="Copied!"
         />
         <span>
-          {/* clipboard icon */}
+          {/* Clipboard icon (shown by default) */}
           <svg
             className="clipboard"
             xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +99,7 @@ export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
             />
           </svg>
 
-          {/* checkmark icon */}
+          {/* Checkmark icon (shown after copy) */}
           <svg
             className="checkmark"
             xmlns="http://www.w3.org/2000/svg"
@@ -110,105 +114,6 @@ export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
           </svg>
         </span>
       </button>
-
-      {/* CSS for the button & tooltip */}
-      <style jsx global>{`
-        .copy {
-          --bg: hsl(var(--secondary));
-          --bg-hover: hsl(var(--secondary) / 0.85);
-          --icon: hsl(var(--secondary-foreground));
-          --icon-hover: hsl(var(--primary));
-
-          --tooltip-bg: hsl(var(--popover));
-          --tooltip-text: hsl(var(--popover-foreground));
-
-          --radius: 10px;
-          --d: 36px;
-          --pad: 7px;
-          --offset: 8px;
-          --font: 12px Menlo, "Roboto Mono", monospace;
-        }
-
-        .copy {
-          position: absolute;
-          top: 0.5rem;
-          right: 0.5rem;
-          width: var(--d);
-          height: var(--d);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: var(--radius);
-          background: var(--bg);
-          color: var(--icon);
-          border: none;
-          cursor: pointer;
-        }
-        .copy svg {
-          pointer-events: none;
-        }
-        .checkmark {
-          display: none;
-        }
-        .copy[data-copied="true"] .clipboard {
-          display: none;
-        }
-        .copy[data-copied="true"] .checkmark {
-          display: block;
-        }
-
-        /* interactions */
-        .copy:hover,
-        .copy:focus-visible {
-          background: var(--bg-hover);
-        }
-
-        .copy:hover svg,
-        .copy:focus-visible svg {
-          color: var(--icon-hover);
-        }
-
-        /* tooltip */
-        .tooltip {
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          opacity: 0;
-          visibility: hidden;
-          font: var(--font);
-          color: var(--tooltip-text);
-          background: var(--tooltip-bg);
-          white-space: nowrap;
-          padding: var(--pad) var(--pad);
-          border-radius: 4px;
-          pointer-events: none;
-        }
-        .tooltip::after {
-          content: "";
-          position: absolute;
-          bottom: calc(var(--pad) * -0.5);
-          left: 50%;
-          width: var(--pad);
-          height: var(--pad);
-          background: inherit;
-          transform: translateX(-50%) rotate(45deg);
-        }
-        .tooltip::before {
-          content: attr(data-text-initial);
-        }
-        .copy[data-copied="true"] .tooltip::before {
-          content: attr(data-text-end);
-        }
-
-        /* show tooltip on hover / focus */
-        .copy:hover .tooltip,
-        .copy:focus-visible .tooltip {
-          opacity: 1;
-          visibility: visible;
-          top: calc((100% + var(--offset)) * -1);
-        }
-      `}</style>
     </div>
   );
 }

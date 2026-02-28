@@ -1,74 +1,33 @@
-// src/sections/projects.tsx
-import path from "path";
-import { promises as fs } from "fs";
-import matter from "gray-matter";
-
+/**
+ * FeaturedProjects: Homepage section showcasing top GitHub repositories.
+ * Server component: fetches featured projects and sorts by star count,
+ * then passes them to the client-side animated ProjectsGrid.
+ */
+import { getAllProjects } from "@/lib/get-projects";
+import type { ProjectMeta } from "@/lib/get-projects";
 import ProjectsGrid from "@/components/projects-grid";
 
 /**
- * Shape of project metadata coming from front-matter.
+ * Subset of ProjectMeta fields consumed by ProjectsGrid.
+ * Re-exported so grid components can import from this module.
  */
-export type Project = {
-  slug: string;
-  title: string;
-  description: string;
-  stars: number;
-  language: string;
-  tags: string[];
-  featured: boolean;
-};
+export type Project = Pick<
+  ProjectMeta,
+  "slug" | "title" | "description" | "stars" | "language" | "tags"
+>;
 
-/**
- * Scan every project folder, read its page.mdx front-matter,
- * and keep only items marked as featured.
- * This runs on the server only.
- */
-async function getFeaturedProjects(): Promise<Project[]> {
-  const baseDir = path.join(process.cwd(), "src/app/projects");
-  const dirEntries = await fs.readdir(baseDir, { withFileTypes: true });
-
-  const all = await Promise.all(
-    dirEntries
-      .filter((d) => d.isDirectory() && !d.name.startsWith("["))
-      .map(async (d) => {
-        const raw = await fs.readFile(
-          path.join(baseDir, d.name, "page.mdx"),
-          "utf8",
-        );
-        const { data } = matter(raw);
-
-        return {
-          slug: d.name,
-          title: data.repo as string,
-          description: data.description as string,
-          stars: data.stars as number,
-          language: data.language as string,
-          tags: Array.isArray(data.tags)
-            ? (data.tags as string[])
-            : data.tags
-              ? [data.tags]
-              : [],
-          featured: Boolean(data.featured),
-        } as Project;
-      }),
-  );
-
-  return all.filter((p) => p.featured).sort((a, b) => b.stars - a.stars);
-}
-
-/**
- * Server component, renders the section shell
- * and passes data to the client-side animated grid.
- */
 export default async function FeaturedProjects() {
-  const projects = await getFeaturedProjects();
+  const projects = await getAllProjects({ featured: true });
+
+  /* Sort by GitHub star count, descending. */
+  const sorted = [...projects].sort((a, b) => b.stars - a.stars);
 
   return (
     <section id="projects" className="my-16 space-y-8">
       <h2 className="text-2xl font-bold dark:text-white">
         Featured Repositories
       </h2>
-      <ProjectsGrid items={projects} />
+      <ProjectsGrid items={sorted} />
     </section>
   );
 }

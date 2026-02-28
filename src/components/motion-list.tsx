@@ -1,7 +1,15 @@
+/**
+ * MotionList: Animated `<ul>` that staggers its children into view.
+ *
+ * @param delayOffset   - Extra delay (seconds) before staggering begins.
+ * @param showWhenInView - If true (default), waits until the list scrolls into view.
+ *                         Set to false to animate immediately on mount.
+ */
 "use client";
 import { cn } from "@/lib/utils";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
+
 export default function MotionList({
   children,
   className,
@@ -16,16 +24,21 @@ export default function MotionList({
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+  /* Animate immediately when scroll-gating is disabled. */
   useEffect(() => {
     if (!showWhenInView) {
       controls.start("visible");
     }
-  }, []);
+  }, [controls, showWhenInView]);
+
+  /* Animate once the element enters the viewport. */
   useEffect(() => {
     if (isInView && showWhenInView) {
       controls.start("visible");
     }
-  }, [isInView]);
+  }, [isInView, controls, showWhenInView]);
+
   return (
     <motion.ul
       ref={ref}
@@ -33,10 +46,7 @@ export default function MotionList({
       initial="hidden"
       animate={controls}
       variants={{
-        hidden: {
-          opacity: 0,
-          y: 20,
-        },
+        hidden: { opacity: 0, y: 20 },
         visible: {
           opacity: 1,
           y: 0,
@@ -52,10 +62,7 @@ export default function MotionList({
           key={i}
           variants={{
             hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-            },
+            visible: { opacity: 1, y: 0 },
           }}
           transition={{
             type: "spring",

@@ -1,3 +1,7 @@
+/**
+ * Header: Sticky top navigation bar.
+ * Contains the site logo (custom font), nav links, and the dark-mode toggle.
+ */
 "use client";
 
 import Link from "next/link";
@@ -5,11 +9,13 @@ import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/theme-toggle";
 
+/** Custom calligraphic font used for the site logo only. */
 const goldenSignature = localFont({
   src: "../assets/GoldenSignature.otf",
   display: "swap",
 });
 
+/** Top-level navigation entries. */
 const nav = [
   { label: "Projects", href: "/projects" },
   { label: "Blog", href: "/blog" },
@@ -23,9 +29,8 @@ export default function Header() {
         bg-background/80 py-4 font-light backdrop-blur md:px-28
       "
     >
-      {/* Container keeps content centered and sets row layout on md+ screens */}
       <div className="container flex flex-col items-center justify-between md:flex-row">
-        {/* Logo / site title */}
+        {/* Logo */}
         <div
           className={cn("text-5xl drop-shadow-2xl", goldenSignature.className)}
         >
@@ -41,8 +46,6 @@ export default function Header() {
               </Link>
             ))}
           </div>
-
-          {/* Dark / light switch */}
           <ThemeToggle />
         </div>
       </div>

@@ -1,3 +1,8 @@
+/**
+ * Hero: Landing section of the homepage.
+ * Contains the animated greeting, Animoji video avatar,
+ * taglines, social icons, and résumé download link.
+ */
 "use client";
 
 import Link from "next/link";
@@ -18,11 +23,11 @@ export default function Hero() {
         </MotionText>
       </h1>
 
-      {/* Animoji video avatar */}
+      {/* Animoji video avatar: shows light or dark version via CSS opacity */}
       <div className="safari-mask-fix relative overflow-hidden rounded-full p-3 md:p-4">
         <MotionDiv className="relative">
           <>
-            {/* light version visible by default, hidden in dark mode */}
+            {/* Light-mode video */}
             <video
               className="
                 h-[170px] w-[170px] opacity-100 dark:opacity-0
@@ -36,7 +41,7 @@ export default function Hero() {
               src="/animoji-light.mp4"
             />
 
-            {/* dark version hidden in light, visible in dark */}
+            {/* Dark-mode video (overlaid, toggled via opacity) */}
             <video
               className="
                 absolute left-0 top-0
@@ -54,7 +59,7 @@ export default function Hero() {
         </MotionDiv>
       </div>
 
-      {/* Two animated taglines */}
+      {/* Animated taglines */}
       <h1>
         <MotionDiv delayOffset={0.8}>Software Development 🧑🏻‍💻</MotionDiv>
       </h1>
@@ -75,12 +80,12 @@ export default function Hero() {
         </MotionDiv>
       </div>
 
-      {/* Social/contact icons */}
+      {/* Social / contact icons */}
       <div className="my-8">
         <ContactList delayOffset={1.45} showWhenInView={false} />
       </div>
 
-      {/* Résumé download button */}
+      {/* Résumé download button (opens Google Docs viewer) */}
       <MotionDiv delayOffset={1.6}>
         <Button asChild>
           <Link

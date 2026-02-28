@@ -1,3 +1,8 @@
+/**
+ * BlogPage: Index page for `/blog`.
+ * Fetches all posts at build time and passes them to the client-side
+ * BlogIndex component which provides search and animated listing.
+ */
 import { getAllPosts } from "@/lib/get-posts";
 import BlogIndex from "@/components/blog-index";
 

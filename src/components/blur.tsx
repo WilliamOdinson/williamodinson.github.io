@@ -1,3 +1,7 @@
+/**
+ * Blur: Decorative gradient blobs used as a background accent.
+ * Purely visual; hidden from assistive tech via `aria-hidden`.
+ */
 export function Blur() {
   return (
     <div

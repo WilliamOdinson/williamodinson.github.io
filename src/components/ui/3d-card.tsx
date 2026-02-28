@@ -1,3 +1,14 @@
+/**
+ * 3D Card: Interactive mouse-follow tilt effect for card elements.
+ *
+ * Architecture:
+ *  - `CardContainer` tracks mouse position and applies rotateX/Y transforms.
+ *  - `CardBody` sets up 3D transform context (preserve-3d).
+ *  - `CardItem` translates/rotates children along Z-axis for a parallax depth effect.
+ *  - `MouseEnterContext` shares hover state between container and items.
+ *
+ * Adapted from Aceternity UI.
+ */
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -7,12 +18,15 @@ import React, {
   useContext,
   useRef,
   useEffect,
+  useCallback,
 } from "react";
 
+/** Shared context: [isMouseEntered, setIsMouseEntered]. */
 const MouseEnterContext = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
 >(undefined);
 
+/** Outer wrapper: applies perspective and tracks mouse position for 3D rotation. */
 export const CardContainer = ({
   children,
   className,
@@ -34,23 +48,19 @@ export const CardContainer = ({
     containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
   };
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsMouseEntered(true);
-    if (!containerRef.current) return;
-  };
+  const handleMouseEnter = () => setIsMouseEntered(true);
 
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseLeave = () => {
     if (!containerRef.current) return;
     setIsMouseEntered(false);
     containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
   };
+
   return (
     <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
       <div
         className={cn(containerClassName)}
-        style={{
-          perspective: "1000px",
-        }}
+        style={{ perspective: "1000px" }}
       >
         <div
           ref={containerRef}
@@ -61,9 +71,7 @@ export const CardContainer = ({
             "relative flex items-center justify-center transition-all duration-200 ease-linear",
             className,
           )}
-          style={{
-            transformStyle: "preserve-3d",
-          }}
+          style={{ transformStyle: "preserve-3d" }}
         >
           {children}
         </div>
@@ -72,6 +80,7 @@ export const CardContainer = ({
   );
 };
 
+/** Container for card content; enables 3D transform inheritance. */
 export const CardBody = ({
   children,
   className,
@@ -82,7 +91,7 @@ export const CardBody = ({
   return (
     <div
       className={cn(
-        "h-96 w-96 [transform-style:preserve-3d]  [&>*]:[transform-style:preserve-3d]",
+        "h-96 w-96 [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]",
         className,
       )}
     >
@@ -91,6 +100,7 @@ export const CardBody = ({
   );
 };
 
+/** Individual item inside the card that moves along the Z-axis on hover. */
 export const CardItem = ({
   as: Tag = "div",
   children,
@@ -116,18 +126,18 @@ export const CardItem = ({
   const ref = useRef<HTMLDivElement>(null);
   const [isMouseEntered] = useMouseEnter();
 
-  useEffect(() => {
-    handleAnimations();
-  }, [isMouseEntered]);
-
-  const handleAnimations = () => {
+  const handleAnimations = useCallback(() => {
     if (!ref.current) return;
     if (isMouseEntered) {
       ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
     } else {
       ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
     }
-  };
+  }, [isMouseEntered, translateX, translateY, translateZ, rotateX, rotateY, rotateZ]);
+
+  useEffect(() => {
+    handleAnimations();
+  }, [handleAnimations]);
 
   return (
     <Tag
@@ -140,7 +150,7 @@ export const CardItem = ({
   );
 };
 
-// Create a hook to use the context
+/** Hook to access the mouse-enter state from within a CardContainer. */
 export const useMouseEnter = () => {
   const context = useContext(MouseEnterContext);
   if (context === undefined) {

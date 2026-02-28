@@ -1,3 +1,7 @@
+/**
+ * ContactList: Row of social/contact icon buttons with tooltips.
+ * Renders icons from Font Awesome; each icon adapts its color for dark mode.
+ */
 "use client";
 
 import Link from "next/link";
@@ -22,19 +26,16 @@ import {
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
 
-/** Contact item shape */
+/** Descriptor for a single contact channel. */
 type Contact = {
   name: string;
   href: string;
-  icon: any; // FontAwesome icon definition
-  color: string; // light-mode color
-  colorDark?: string; // optional override for dark mode
+  icon: import("@fortawesome/fontawesome-svg-core").IconDefinition;
+  color: string;       // Icon color for light mode
+  colorDark?: string;  // Override for dark mode (falls back to `color`)
 };
 
-/**
- * Centralized list of contact points.
- * Background is kept neutral; brand color is applied to the icon itself.
- */
+/** All social/contact links displayed in the hero section. */
 const contacts: Contact[] = [
   {
     name: "earthsuperman@outlook.com",
@@ -78,6 +79,10 @@ const contacts: Contact[] = [
   },
 ];
 
+/**
+ * @param delayOffset  - Extra delay (seconds) before the stagger animation starts.
+ * @param showWhenInView - If true, animate only when scrolled into view.
+ */
 export default function ContactList({
   delayOffset = 0,
   showWhenInView = true,
@@ -88,16 +93,14 @@ export default function ContactList({
   const { theme } = useTheme();
 
   return (
-    <MotionList delayOffset={delayOffset} showWhenInView={showWhenInView}>
-      {contacts.map(({ name, href, icon, color, colorDark }, idx) => {
-        // choose color based on current theme
-        const iconColor = theme === "dark" ? colorDark ?? color : color;
+    <TooltipProvider delayDuration={0}>
+      <MotionList delayOffset={delayOffset} showWhenInView={showWhenInView}>
+        {contacts.map(({ name, href, icon, color, colorDark }) => {
+          const iconColor = theme === "dark" ? (colorDark ?? color) : color;
 
-        return (
-          <TooltipProvider delayDuration={0} key={idx}>
-            <Tooltip>
+          return (
+            <Tooltip key={name}>
               <TooltipTrigger asChild>
-                {/* Transparent "ghost" button */}
                 <Button
                   className={cn(
                     "flex h-11 w-11 items-center justify-center rounded-full bg-transparent p-3",
@@ -119,9 +122,9 @@ export default function ContactList({
                 <p>{name}</p>
               </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
-        );
-      })}
-    </MotionList>
+          );
+        })}
+      </MotionList>
+    </TooltipProvider>
   );
 }

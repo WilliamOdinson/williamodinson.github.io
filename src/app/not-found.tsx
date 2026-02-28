@@ -1,3 +1,4 @@
+/** Custom 404 page with a centered message and a "Return Home" button. */
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

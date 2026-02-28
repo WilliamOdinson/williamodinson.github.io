@@ -1,3 +1,7 @@
+/**
+ * ThemeToggle: Sun/moon toggle switch for dark mode.
+ * Uses a hidden checkbox + CSS-only animation to morph between states.
+ */
 "use client";
 
 import { useTheme } from "@/components/theme-provider";
@@ -16,6 +20,7 @@ export default function ThemeToggle() {
         className="peer sr-only"
       />
 
+      {/* Track */}
       <span
         className="
           absolute inset-0 rounded-full border-2 border-[#383838] bg-[#383838]
@@ -24,6 +29,7 @@ export default function ThemeToggle() {
         "
       />
 
+      {/* Thumb: crescent moon in dark mode, solid sun circle in light */}
       <span
         className="
           absolute left-[6px] top-[5px] h-[22px] w-[22px] rounded-full

@@ -1,3 +1,13 @@
+/**
+ * RootLayout: Top-level layout wrapping every page.
+ *
+ * Responsibilities:
+ *  - Loads the Montserrat font globally.
+ *  - Injects a `<script>` to detect the user's theme before first paint
+ *    (prevents dark-mode flash on reload).
+ *  - Renders the shared Header, Footer, GridBackground, and BackToTop.
+ *  - Provides the ThemeProvider context to all children.
+ */
 import "./globals.css";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
@@ -47,7 +57,7 @@ export default function RootLayout({
        theme-preload script toggling .dark before React mounts */
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* theme detection */}
+        {/* Detect stored/system theme before first paint to avoid flash */}
         <Script id="theme-init" strategy="beforeInteractive">
           {`
             (function () {
