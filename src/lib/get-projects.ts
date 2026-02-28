@@ -25,6 +25,15 @@ export interface ProjectMeta {
 }
 
 /**
+ * Subset of ProjectMeta fields consumed by grid/card components.
+ * Defined here to avoid components importing from section-level modules.
+ */
+export type ProjectSummary = Pick<
+  ProjectMeta,
+  "slug" | "title" | "description" | "stars" | "language" | "tags"
+>;
+
+/**
  * Scan `src/app/projects/` for MDX files and return their metadata.
  *
  * @param filter - Optional filter; pass `{ featured: true }` for homepage projects.

@@ -34,7 +34,7 @@ export async function GET() {
     link: SITE,
     title: "Blog by William Sun",
     description: "Articles on Software Engineering, AI, etc.",
-    copyright: "© 2026 Yiqing Sun",
+    copyright: `© ${new Date().getFullYear()} Yiqing Sun`,
     language: "en",
     updated: new Date(posts[0]?.date ?? Date.now()),
     feedLinks: { rss: `${SITE}/feed.xml` },

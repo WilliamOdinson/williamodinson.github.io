@@ -62,9 +62,9 @@ export default function RootLayout({
           {`
             (function () {
               try {
-                var stored = localStorage.getItem('theme');
-                var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                var theme = stored || system;
+                const stored = localStorage.getItem('theme');
+                const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                const theme = stored || system;
                 if (theme === 'dark') document.documentElement.classList.add('dark');
               } catch (_) {}
             })();

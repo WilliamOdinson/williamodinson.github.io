@@ -47,21 +47,19 @@ export default function About() {
 
       {/* Portrait column */}
       <div className="lg:order-2 lg:w-1/3">
-        {/* Desktop: 3D tilt card */}
         <MotionDiv delayOffset={0.4}>
+          {/* Desktop: 3D tilt card */}
           <CoolPortraitCard className="hidden lg:block">
             <Image src="/selfie.jpg"
-              alt="photo"
+              alt="Portrait of Yiqing Sun"
               width={350}
               height={438}
               className="w-[350px] min-w-[300px] rounded-xl transition-all"
             />
           </CoolPortraitCard>
-        </MotionDiv>
-        {/* Mobile: simple hover-scale */}
-        <MotionDiv delayOffset={0.4}>
+          {/* Mobile: simple hover-scale */}
           <Image src="/selfie.jpg"
-            alt="photo"
+            alt="Portrait of Yiqing Sun"
             width={350}
             height={438}
             className="w-[350px] min-w-[300px] rounded-xl transition-all hover:rotate-3 hover:scale-105 lg:hidden"

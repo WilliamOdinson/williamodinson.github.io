@@ -7,12 +7,10 @@ export default function GridBackground() {
     <div
       className="
         fixed inset-0 -z-10 h-full w-full
-        bg-white
+        bg-white bg-[size:24px_24px]
         bg-[radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.05)_1.5px,transparent_2px)]
-        bg-[size:24px_24px]
         dark:bg-[#030816]
         dark:bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.05)_1.5px,transparent_2px)]
-        dark:bg-[size:24px_24px]
       "
     />
   );

@@ -22,6 +22,8 @@ export default function Mermaid({ chart }: MermaidProps) {
   const { theme } = useTheme();
 
   useEffect(() => {
+    let cancelled = false;
+
     mermaid.initialize({
       startOnLoad: false,
       theme: theme === "dark" ? "dark" : "default",
@@ -34,13 +36,21 @@ export default function Mermaid({ chart }: MermaidProps) {
       try {
         const id = `mermaid${stableId}-${++renderCounter}`;
         const { svg } = await mermaid.render(id, chart);
-        ref.current.innerHTML = svg;
+        if (!cancelled && ref.current) {
+          ref.current.innerHTML = svg;
+        }
       } catch (err) {
         console.error("Mermaid render error:", err);
-        ref.current.innerHTML =
-          '<pre style="color:red;">Mermaid render error</pre>';
+        if (!cancelled && ref.current) {
+          ref.current.innerHTML =
+            '<pre style="color:red;">Mermaid render error</pre>';
+        }
       }
     })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [chart, theme, stableId]);
 
   return <div ref={ref} />;

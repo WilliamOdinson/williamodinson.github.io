@@ -10,6 +10,21 @@
 import { useEffect, useRef } from "react";
 import { useTheme } from "@/components/theme-provider";
 
+/** Giscus configuration attributes (keys map directly to `data-*` attributes). */
+const GISCUS_CONFIG: Record<string, string> = {
+  repo: "WilliamOdinson/williamodinson.github.io",
+  "repo-id": "R_kgDOPGBcbA",
+  category: "Announcements",
+  "category-id": "DIC_kwDOPGBcbM4CteGj",
+  mapping: "pathname",
+  strict: "0",
+  "reactions-enabled": "1",
+  "emit-metadata": "0",
+  "input-position": "bottom",
+  loading: "lazy",
+  lang: "en",
+};
+
 export default function GiscusComments() {
   const container = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
@@ -18,34 +33,23 @@ export default function GiscusComments() {
   useEffect(() => {
     if (!container.current) return;
 
+    // Avoid re-injecting if already present
+    if (container.current.querySelector("script[data-giscus]")) return;
+
     const initialTheme = document.documentElement.classList.contains("dark")
       ? "dark"
       : "light";
-
-    // Avoid re-injecting if already present
-    if (container.current.querySelector("script[data-giscus]")) return;
 
     const s = document.createElement("script");
     s.src = "https://giscus.app/client.js";
     s.async = true;
     s.setAttribute("crossorigin", "anonymous");
     s.setAttribute("data-giscus", "");
-
-    // Repository mapping
-    s.setAttribute("data-repo", "WilliamOdinson/williamodinson.github.io");
-    s.setAttribute("data-repo-id", "R_kgDOPGBcbA");
-    s.setAttribute("data-category", "Announcements");
-    s.setAttribute("data-category-id", "DIC_kwDOPGBcbM4CteGj");
-
-    // Behaviour
-    s.setAttribute("data-mapping", "pathname");
-    s.setAttribute("data-strict", "0");
-    s.setAttribute("data-reactions-enabled", "1");
-    s.setAttribute("data-emit-metadata", "0");
-    s.setAttribute("data-input-position", "bottom");
-    s.setAttribute("data-loading", "lazy");
     s.setAttribute("data-theme", initialTheme);
-    s.setAttribute("data-lang", "en");
+
+    for (const [key, value] of Object.entries(GISCUS_CONFIG)) {
+      s.setAttribute(`data-${key}`, value);
+    }
 
     container.current.appendChild(s);
   }, []);

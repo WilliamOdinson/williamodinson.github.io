@@ -4,17 +4,7 @@
  * then passes them to the client-side animated ProjectsGrid.
  */
 import { getAllProjects } from "@/lib/get-projects";
-import type { ProjectMeta } from "@/lib/get-projects";
 import ProjectsGrid from "@/components/projects-grid";
-
-/**
- * Subset of ProjectMeta fields consumed by ProjectsGrid.
- * Re-exported so grid components can import from this module.
- */
-export type Project = Pick<
-  ProjectMeta,
-  "slug" | "title" | "description" | "stars" | "language" | "tags"
->;
 
 export default async function FeaturedProjects() {
   const projects = await getAllProjects({ featured: true });

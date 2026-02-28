@@ -55,5 +55,5 @@ export async function getAllPosts(
       ? posts.filter((p) => p.featured === filter.featured)
       : posts;
 
-  return filtered.sort((a, b) => +new Date(b.date) - +new Date(a.date));
+  return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }

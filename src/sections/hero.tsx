@@ -13,6 +13,13 @@ import MotionDiv from "@/components/motion-div";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 
+/** Google Docs viewer link wrapping the latest résumé PDF from GitHub Releases. */
+const RESUME_URL =
+  "https://docs.google.com/gview?embedded=1&url=" +
+  encodeURIComponent(
+    "https://github.com/WilliamOdinson/williamodinson.github.io/releases/latest/download/resume.pdf",
+  );
+
 export default function Hero() {
   return (
     <section className="my-8 flex flex-col items-center justify-center">
@@ -26,7 +33,6 @@ export default function Hero() {
       {/* Animoji video avatar: shows light or dark version via CSS opacity */}
       <div className="safari-mask-fix relative overflow-hidden rounded-full p-3 md:p-4">
         <MotionDiv className="relative">
-          <>
             {/* Light-mode video */}
             <video
               className="
@@ -55,7 +61,6 @@ export default function Hero() {
               style={{ backgroundColor: "transparent" }}
               src="/animoji-dark.mp4"
             />
-          </>
         </MotionDiv>
       </div>
 
@@ -89,12 +94,7 @@ export default function Hero() {
       <MotionDiv delayOffset={1.6}>
         <Button asChild>
           <Link
-            href={
-              "https://docs.google.com/gview?embedded=1&url=" +
-              encodeURIComponent(
-                "https://github.com/WilliamOdinson/williamodinson.github.io/releases/latest/download/resume.pdf",
-              )
-            }
+            href={RESUME_URL}
             target="_blank"
             rel="noopener noreferrer"
           >

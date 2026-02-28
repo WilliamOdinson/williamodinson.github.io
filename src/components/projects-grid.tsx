@@ -7,7 +7,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { MdStar } from "react-icons/md";
-import type { Project } from "@/sections/projects";
+import type { ProjectSummary } from "@/lib/get-projects";
 
 /** Stagger timing for the grid container. */
 const containerVariants = {
@@ -30,7 +30,7 @@ const cardVariants = {
   },
 };
 
-export default function ProjectsGrid({ items }: { items: Project[] }) {
+export default function ProjectsGrid({ items }: { items: ProjectSummary[] }) {
   return (
     <motion.div
       className="grid grid-cols-1 gap-4 md:grid-cols-2"

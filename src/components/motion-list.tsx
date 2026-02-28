@@ -7,8 +7,24 @@
  */
 "use client";
 import { cn } from "@/lib/utils";
-import { motion, useAnimation, useInView } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (delayOffset: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delayChildren: 0.3 + delayOffset,
+      staggerChildren: 0.1,
+    },
+  }),
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
 export default function MotionList({
   children,
@@ -21,49 +37,28 @@ export default function MotionList({
   delayOffset?: number;
   showWhenInView?: boolean;
 }) {
-  const controls = useAnimation();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  /* Shared props for both modes. */
+  const shared = {
+    className: cn("flex gap-4", className),
+    variants: containerVariants,
+    custom: delayOffset,
+    initial: "hidden" as const,
+  };
 
-  /* Animate immediately when scroll-gating is disabled. */
-  useEffect(() => {
-    if (!showWhenInView) {
-      controls.start("visible");
-    }
-  }, [controls, showWhenInView]);
-
-  /* Animate once the element enters the viewport. */
-  useEffect(() => {
-    if (isInView && showWhenInView) {
-      controls.start("visible");
-    }
-  }, [isInView, controls, showWhenInView]);
+  /*
+   * When showWhenInView is true, use whileInView so the animation triggers
+   * only when the element enters the viewport.  Otherwise animate on mount.
+   */
+  const animationProps = showWhenInView
+    ? { whileInView: "visible" as const, viewport: { once: true } }
+    : { animate: "visible" as const };
 
   return (
-    <motion.ul
-      ref={ref}
-      className={cn("flex gap-4", className)}
-      initial="hidden"
-      animate={controls}
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: {
-            delayChildren: 0.3 + delayOffset,
-            staggerChildren: 0.1,
-          },
-        },
-      }}
-    >
+    <motion.ul {...shared} {...animationProps}>
       {children.map((child, i) => (
         <motion.li
           key={i}
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { opacity: 1, y: 0 },
-          }}
+          variants={itemVariants}
           transition={{
             type: "spring",
             damping: 20,
