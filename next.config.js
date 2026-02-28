@@ -14,6 +14,7 @@ const withMDX = require('@next/mdx')({
     remarkPlugins: [
       remarkFrontmatter,
       [remarkMdxFrontmatter, { name: 'frontMatter' }],
+      require('./src/lib/remark-json-ld.mjs').default,
     ],
     rehypePlugins: [],
   },
