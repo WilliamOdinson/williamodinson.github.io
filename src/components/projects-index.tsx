@@ -51,8 +51,7 @@ export default function ProjectsIndex({ items }: { items: ProjectMeta[] }) {
       className="flex list-none flex-col gap-14"
     >
       {items.map((p) => {
-        const imgSrc =
-          p.cover && p.cover.trim().length ? p.cover : PLACEHOLDER_IMG;
+        const imgSrc = p.cover?.trim() || PLACEHOLDER_IMG;
 
         return (
           <motion.li key={p.slug} variants={rowVariants}>

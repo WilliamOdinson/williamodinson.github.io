@@ -5,7 +5,6 @@
 "use client";
 
 import { useWindowScroll } from "react-use";
-import { useMemo } from "react";
 import { Button } from "./ui/button";
 import { ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,7 +23,7 @@ const variants = {
 
 export default function BackToTop() {
   const { y } = useWindowScroll();
-  const show = useMemo(() => y > 100, [y]);
+  const show = y > 100;
 
   return (
     <AnimatePresence>

@@ -8,7 +8,7 @@ import BlogIndex from "@/components/blog-index";
 
 export const metadata = {
   title: "Blog By William Sun",
-  description: "Articles on System Design. Search by title or summary.",
+  description: "Articles on Software Engineering, AI, etc. Search by title or summary.",
 };
 
 export default async function BlogPage() {

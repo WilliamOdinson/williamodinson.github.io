@@ -6,8 +6,7 @@
  */
 "use client";
 import { cn } from "@/lib/utils";
-import { motion, useAnimation, useInView } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
 export default function MotionDiv({
   children,
@@ -18,22 +17,12 @@ export default function MotionDiv({
   delayOffset?: number;
   className?: string;
 }) {
-  const controls = useAnimation();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (isInView) {
-      controls.start({ y: 0, opacity: 1 });
-    }
-  }, [controls, isInView]);
-
   return (
     <motion.div
-      ref={ref}
       className={cn("relative flex items-center justify-center", className)}
       initial={{ y: 100, opacity: 0 }}
-      animate={controls}
+      whileInView={{ y: 0, opacity: 1 }}
+      viewport={{ once: true }}
       transition={{
         type: "spring",
         damping: 30,

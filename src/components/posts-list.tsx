@@ -15,6 +15,13 @@ type Post = {
   date: string;
 };
 
+/** Cached formatter for "Month DD, YYYY" style dates. */
+const dateFmt = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "2-digit",
+});
+
 /** Stagger timing for the list container. */
 const containerVariants = {
   hidden: {},
@@ -54,11 +61,7 @@ export default function PostsList({ items }: { items: Post[] }) {
           >
             <div className="flex items-start gap-4">
               <time className="w-30 mt-1 flex-shrink-0 text-sm text-muted-foreground">
-                {new Intl.DateTimeFormat("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "2-digit",
-                }).format(new Date(p.date))}
+                {dateFmt.format(new Date(p.date))}
               </time>
               <div className="flex-1">
                 <h3 className="text-xl font-semibold transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
