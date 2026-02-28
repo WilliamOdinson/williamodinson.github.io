@@ -18,30 +18,28 @@ import GridBackground from "@/components/grid-background";
 import { ThemeProvider } from "@/components/theme-provider";
 import Script from "next/script";
 import Footer from "@/components/footer";
+import { author, site } from "@/lib/site.config.mjs";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Yiqing Sun",
-  metadataBase: new URL("https://williamodinson.github.io"),
+  title: site.title,
+  metadataBase: new URL(site.url),
   alternates: { canonical: "/" },
 
-  description: "Yiqing Sun's personal portfolio website, 孙逸青的个人主页",
+  description: site.description,
 
-  authors: [
-    { name: "Yiqing Sun", url: "https://github.com/williamodinson" },
-    { name: "孙逸青", url: "https://github.com/williamodinson" },
-  ],
+  authors: [{ name: author.name, url: author.social.github }],
 
   openGraph: {
-    title: "Yiqing Sun",
-    description: "Yiqing Sun's personal portfolio website, 孙逸青的个人主页",
+    title: site.title,
+    description: site.description,
     images: [
       {
-        url: "/selfie.jpg",
-        alt: "Yiqing Sun's Portrait",
-        width: 640,
-        height: 800,
+        url: author.image.src,
+        alt: author.image.alt,
+        width: author.image.width,
+        height: author.image.height,
       },
     ],
   },
@@ -84,32 +82,21 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "Person",
-                name: "Yiqing Sun",
-                alternateName: "William Sun",
-                url: "https://williamodinson.github.io",
-                image: "https://williamodinson.github.io/selfie.jpg",
-                jobTitle: "Software Engineer",
-                alumniOf: [
-                  {
-                    "@type": "CollegeOrUniversity",
-                    name: "Carnegie Mellon University",
-                  },
-                  {
-                    "@type": "CollegeOrUniversity",
-                    name: "Tianjin University",
-                  },
-                ],
-                sameAs: [
-                  "https://github.com/williamodinson",
-                  "https://linkedin.com/in/williamodinson",
-                  "https://x.com/william18652",
-                ],
+                name: author.name,
+                url: site.url,
+                image: `${site.url}${author.image.src}`,
+                jobTitle: author.jobTitle,
+                alumniOf: author.education.map((name) => ({
+                  "@type": "CollegeOrUniversity",
+                  name,
+                })),
+                sameAs: Object.values(author.social),
               },
               {
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                name: "Yiqing Sun",
-                url: "https://williamodinson.github.io",
+                name: site.title,
+                url: site.url,
               },
             ]),
           }}

@@ -1,5 +1,5 @@
 /* TEAM */
-Developer:  Yiqing (William) Sun (孙逸青)
+Developer:  William Sun
 Role:       Full-stack Developer • Designer • Content Author
 Location:   Pittsburgh, Pennsylvania, United States of America
 Email:      earthsuperman@outlook.com

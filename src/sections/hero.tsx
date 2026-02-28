@@ -6,6 +6,7 @@
 "use client";
 
 import Link from "next/link";
+import { author } from "@/lib/site.config.mjs";
 
 import ContactList from "@/components/contact-list";
 import MotionText from "@/components/motion-text";
@@ -26,7 +27,7 @@ export default function Hero() {
       {/* Greeting */}
       <h1 className="mb-4 text-[1.4rem] md:text-[2rem]">
         <MotionText delayOffset={0}>
-          Hi, I'm Yiqing (William) Sun! 👋
+          {`Hi, I'm ${author.name}! 👋`}
         </MotionText>
       </h1>
 
