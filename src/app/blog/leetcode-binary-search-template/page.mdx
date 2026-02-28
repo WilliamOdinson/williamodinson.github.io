@@ -1,0 +1,158 @@
+---
+title: "[LeetCode] Binary Search Without the Edge Case Headaches"
+summary: "A single template for all binary search problems."
+date: 2025-08-10
+tags: ["Binary Search", "Algorithms", "LeetCode", "Python"]
+featured: false
+---
+
+# Binary Search Without the Edge Case Headaches
+
+Binary search is supposed to be simple. Split the array in half, check the middle, repeat. But anyone who's spent time on LeetCode knows the real difficulty isn't the idea -- it's the implementation. `left < right` or `left <= right`? `mid` or `mid + 1`? Return `left` or `right`? Every problem feels like a fresh puzzle of off-by-one errors.
+
+I used to re-derive the boundary logic for every single binary search problem. Eventually I settled on a fixed template that I've used on dozens of problems without failure. Here's the template, and more importantly, why it works.
+
+## The Template
+
+```python
+left, right = 0, n - 1
+while left <= right:
+    mid = (right - left) // 2 + left
+    if condition:
+        left = mid + 1
+    else:
+        right = mid - 1
+```
+
+Three rules, no exceptions:
+
+1. Loop condition is always `while left <= right`
+2. Updates are always `left = mid + 1` and `right = mid - 1`
+3. Never return inside the loop -- decide what to return after the loop exits
+
+## Why It Works
+
+When the loop exits, `left = right + 1`. Always. This isn't a heuristic -- you can prove it.
+
+The loop runs as long as `left <= right`, so the interval `[left, right]` is non-empty on every iteration. Each branch strictly shrinks the interval because `mid` always lies within `[left, right]`. When the interval finally shrinks to `left == right`, we get `mid == left == right`, and one more branch pushes them past each other. The only possible exit state is:
+
+<div style={{display:'flex',flexDirection:'column',alignItems:'center',margin:'2rem 0',fontFamily:'Menlo, monospace',fontSize:'0.9rem'}}>
+  <div style={{display:'flex',alignItems:'center',gap:0}}>
+    <div style={{padding:'0.5rem 1rem',border:'1px solid hsl(var(--border))',background:'hsl(var(--secondary))',borderRadius:'4px 0 0 4px',color:'hsl(var(--muted-foreground))'}}>...</div>
+    <div style={{padding:'0.5rem 1rem',border:'1px solid hsl(var(--border))',borderLeft:'none',fontWeight:700}}>arr[right]</div>
+    <div style={{padding:'0.5rem 1rem',border:'1px solid hsl(var(--border))',borderLeft:'none',fontWeight:700}}>arr[left]</div>
+    <div style={{padding:'0.5rem 1rem',border:'1px solid hsl(var(--border))',borderLeft:'none',background:'hsl(var(--secondary))',borderRadius:'0 4px 4px 0',color:'hsl(var(--muted-foreground))'}}>...</div>
+  </div>
+  <div style={{display:'flex',alignItems:'flex-start',gap:0,marginTop:'0.25rem'}}>
+    <div style={{width:'calc(1rem + 2rem)',flexShrink:0}}/>
+    <div style={{display:'flex',flexDirection:'column',alignItems:'center',width:'calc(2rem + 8ch)',flexShrink:0}}>
+      <span>{'|'}</span>
+      <span style={{fontWeight:700}}>right</span>
+    </div>
+    <div style={{display:'flex',flexDirection:'column',alignItems:'center',width:'calc(2rem + 7ch)',flexShrink:0}}>
+      <span>{'|'}</span>
+      <span style={{fontWeight:700}}>left</span>
+    </div>
+  </div>
+  <div style={{display:'flex',gap:'2rem',marginTop:'0.5rem',fontSize:'0.8rem',color:'hsl(var(--muted-foreground))'}}>
+    <span>{'<-- left half -->'}</span>
+    <span>{'<-- right half -->'}</span>
+  </div>
+</div>
+
+The array has been partitioned into two halves. Every element that triggered `left = mid + 1` is now on the left side (at or before `right`). Every element that triggered `right = mid - 1` is on the right side (at or after `left`).
+
+So `right` is the last element of the left half, and `left` is the first element of the right half.
+
+## Deciding the Return Value
+
+Ask one question: which branch did my target get swept into?
+
+If the target satisfies the condition that triggers `left = mid + 1`, it ended up in the left half. The last such element is `right`. **Return `right`.**
+
+If the target satisfies the condition that triggers `right = mid - 1`, it ended up in the right half. The first such element is `left`. **Return `left`.**
+
+That's the entire decision process. No case analysis, no finger-tracing through examples.
+
+## Example: [LeetCode 34](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/) (Find First and Last Position)
+
+This problem asks for the leftmost and rightmost positions of a target in a sorted array. It needs two binary searches.
+
+**Finding the left boundary** (first occurrence of target):
+
+```python
+def find_left(nums, target):
+    lo, hi = 0, len(nums) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if nums[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return lo
+```
+
+When `nums[mid] == target`, we go into the `else` branch (`hi = mid - 1`), pushing `hi` left past the match. So equal-to-target elements get swept by `hi = mid - 1`, landing in the right half. Return `lo`.
+
+**Finding the right boundary** (last occurrence of target):
+
+```python
+def find_right(nums, target):
+    lo, hi = 0, len(nums) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if nums[mid] <= target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return hi
+```
+
+When `nums[mid] == target`, we hit `lo = mid + 1`, pushing `lo` right past the match. Equal-to-target elements get swept by `lo = mid + 1`, landing in the left half. Return `hi`.
+
+**Putting it together:**
+
+```python
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        def find_left():
+            lo, hi = 0, len(nums) - 1
+            while lo <= hi:
+                mid = (lo + hi) // 2
+                if nums[mid] < target:
+                    lo = mid + 1
+                else:
+                    hi = mid - 1
+            return lo
+
+        def find_right():
+            lo, hi = 0, len(nums) - 1
+            while lo <= hi:
+                mid = (lo + hi) // 2
+                if nums[mid] <= target:
+                    lo = mid + 1
+                else:
+                    hi = mid - 1
+            return hi
+
+        l, r = find_left(), find_right()
+        return [l, r] if l <= r else [-1, -1]
+```
+
+The only difference between the two functions is `<` vs `<=`. That single character controls whether equal elements get pushed left or right.
+
+## Boundary Checks
+
+The pointers can land outside the array. If every element is greater than the target, `right` ends up at -1. If every element is smaller, `left` ends up at `n`. Both cases still satisfy `left = right + 1` -- the invariant holds even at the extremes.
+
+So after the loop, always check that your returned index is within `[0, n-1]` and that `nums[index] == target` (or whatever your problem requires). The template guarantees the partition is correct; you just need to verify the answer exists.
+
+## Other Examples
+
+**[LeetCode 278](https://leetcode.com/problems/first-bad-version/) (First Bad Version):** Classic `FFFFTTTTT` partition. `isBadVersion(mid)` is true -> `hi = mid - 1`. Answer swept by `hi`, return `lo`.
+
+**[LeetCode 35](https://leetcode.com/problems/search-insert-position/) (Search Insert Position):** Find the first index where `nums[i] >= target`. `nums[mid] >= target` -> `hi = mid - 1`. Answer swept by `hi`, return `lo`.
+
+**Finding the last element {'<='} target:** `nums[mid] <= target` -> `lo = mid + 1`. Answer swept by `lo`, return `hi`.
+
+Same template, same reasoning, every time.
