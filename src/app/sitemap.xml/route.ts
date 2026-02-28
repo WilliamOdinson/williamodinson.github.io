@@ -1,3 +1,14 @@
+/**
+ * Sitemap Route: Generates `/sitemap.xml` at build time.
+ *
+ * Collects:
+ *  - Static top-level pages (/, /projects, /blog).
+ *  - Dynamic blog posts (from `src/app/blog/<slug>/page.mdx`).
+ *  - Dynamic projects (from `src/app/projects/<slug>/page.mdx`).
+ *
+ * Each dynamic entry includes a SHA-256 content hash in a custom namespace
+ * (`xhash:sha256`) to help crawlers detect content changes.
+ */
 import { promises as fs } from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -7,15 +18,18 @@ export const dynamic = "force-static";
 
 const BASE = "https://williamodinson.github.io";
 
-/** Unified object type used for every <url> entry */
+/** A single `<url>` entry in the sitemap. */
 type UrlEntry = {
   loc: string;
-  lastmod: string; // YYYY-MM-DD
-  sha?: string; // present only for MDX pages
+  lastmod: string;   // YYYY-MM-DD
+  sha?: string;      // Content hash (only for MDX pages)
 };
 
 /**
- * Collect every folder in dir that owns a page.mdx file.
+ * Scan a directory for MDX page folders and return sitemap entries.
+ *
+ * @param dir    - Absolute path to the parent directory (e.g. `src/app/blog`).
+ * @param prefix - URL prefix (e.g. `/blog`).
  */
 async function collect(dir: string, prefix: string): Promise<UrlEntry[]> {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -27,13 +41,14 @@ async function collect(dir: string, prefix: string): Promise<UrlEntry[]> {
         const mdxPath = path.join(dir, folder.name, "page.mdx");
         const raw = await fs.readFile(mdxPath, "utf8");
 
-        // date from front-matter or file mtime
+        // Use front-matter date or file mtime as lastmod
         const { data } = matter(raw);
         const stat = await fs.stat(mdxPath);
         const dateStr = new Date(data.date ?? data.lastModified ?? stat.mtime)
           .toISOString()
           .slice(0, 10);
 
+        // Short SHA-256 hash for change detection
         const sha = crypto
           .createHash("sha256")
           .update(raw)
@@ -48,18 +63,16 @@ async function collect(dir: string, prefix: string): Promise<UrlEntry[]> {
       }),
   );
 }
-/**
- * Generates a sitemap.xml for the site.
- */
+
 export async function GET() {
-  // dynamic collections
+  // Collect dynamic content pages
   const blog = await collect(path.join(process.cwd(), "src/app/blog"), "/blog");
   const projects = await collect(
     path.join(process.cwd(), "src/app/projects"),
     "/projects",
   );
 
-  // static top-level pages
+  // Static top-level pages (use today's date as lastmod)
   const today = new Date().toISOString().slice(0, 10);
   const topLevel: UrlEntry[] = [
     { loc: BASE, lastmod: today },

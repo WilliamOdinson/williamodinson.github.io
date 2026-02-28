@@ -1,3 +1,7 @@
+/**
+ * ProjectsPage: Index page for `/projects`.
+ * Lists all projects chronologically with cover images.
+ */
 import { getAllProjects } from "@/lib/get-projects";
 import ProjectsIndex from "@/components/projects-index";
 

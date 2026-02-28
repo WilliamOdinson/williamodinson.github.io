@@ -94,7 +94,7 @@
     }
   }
 
-  /* Underline-on-hover for top-nav links */
+  /* Underline-on-hover for top-nav links — uses currentColor for dark mode */
   .nav-links > * {
     @apply relative;
   }
@@ -107,7 +107,7 @@
       bottom: 0;
       width: 0;
       height: 1.25px;
-      background: black;
+      background: currentColor;
       transition: width 0.2s ease-out;
     }
 
@@ -131,9 +131,101 @@
   }
 }
 
-@font-face {
-  font-family: "GoldenSignature";
-  src: url("/GoldenSignature.otf");
+/* ── Code-block copy button (moved from inline <style jsx>) ─────── */
+.copy-btn {
+  --bg: hsl(var(--secondary));
+  --bg-hover: hsl(var(--secondary) / 0.85);
+  --icon: hsl(var(--secondary-foreground));
+  --icon-hover: hsl(var(--primary));
+  --tooltip-bg: hsl(var(--popover));
+  --tooltip-text: hsl(var(--popover-foreground));
+  --radius: 10px;
+  --d: 36px;
+  --pad: 7px;
+  --offset: 8px;
+  --font: 12px Menlo, "Roboto Mono", monospace;
+
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: var(--d);
+  height: var(--d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--icon);
+  border: none;
+  cursor: pointer;
+}
+
+.copy-btn svg {
+  pointer-events: none;
+}
+
+.copy-btn .checkmark {
+  display: none;
+}
+
+.copy-btn[data-copied="true"] .clipboard {
+  display: none;
+}
+
+.copy-btn[data-copied="true"] .checkmark {
+  display: block;
+}
+
+.copy-btn:hover,
+.copy-btn:focus-visible {
+  background: var(--bg-hover);
+}
+
+.copy-btn:hover svg,
+.copy-btn:focus-visible svg {
+  color: var(--icon-hover);
+}
+
+.copy-btn .copy-tooltip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  font: var(--font);
+  color: var(--tooltip-text);
+  background: var(--tooltip-bg);
+  white-space: nowrap;
+  padding: var(--pad);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.copy-btn .copy-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: calc(var(--pad) * -0.5);
+  left: 50%;
+  width: var(--pad);
+  height: var(--pad);
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.copy-btn .copy-tooltip::before {
+  content: attr(data-text-initial);
+}
+
+.copy-btn[data-copied="true"] .copy-tooltip::before {
+  content: attr(data-text-end);
+}
+
+.copy-btn:hover .copy-tooltip,
+.copy-btn:focus-visible .copy-tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: calc((100% + var(--offset)) * -1);
 }
 
 @layer utilities {

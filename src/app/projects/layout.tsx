@@ -1,5 +1,7 @@
-import "@/app/globals.css";
-
+/**
+ * ProjectLayout: Shared layout for all `/projects/*` routes.
+ * Wraps project detail pages in Tailwind Typography prose styling.
+ */
 export default function ProjectLayout({
   children,
 }: {

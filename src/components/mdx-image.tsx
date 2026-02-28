@@ -1,12 +1,12 @@
+/**
+ * MdxImage: Drop-in replacement for `<img>` inside MDX prose.
+ * Clicking the image opens a full-screen Lightbox overlay.
+ */
 "use client";
 
 import { useState } from "react";
 import Lightbox from "@/components/lightbox";
 
-/**
- * Drop-in replacement for <img> inside MDX prose.
- * Clicking the image opens a full-screen lightbox.
- */
 export default function MdxImage(props: React.ImgHTMLAttributes<HTMLImageElement>) {
   const [open, setOpen] = useState(false);
 

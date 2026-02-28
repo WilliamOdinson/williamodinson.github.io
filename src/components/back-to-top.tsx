@@ -1,63 +1,61 @@
+/**
+ * BackToTop: Floating button that scrolls the page to the top.
+ * Appears after the user scrolls past 100 px, animates in/out via Framer Motion.
+ */
 "use client";
+
 import { useWindowScroll } from "react-use";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Button } from "./ui/button";
 import { ChevronUp } from "lucide-react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+/** Slide-up / slide-down animation states. */
+const variants = {
+  hidden: { x: 0, y: 100, opacity: 0 },
+  visible: { x: 0, y: 0, opacity: 1 },
+};
+
 export default function BackToTop() {
-  const controls = useAnimation();
-  const variants = {
-    hidden: {
-      x: 0,
-      y: 100,
-      opacity: 0,
-    },
-    visible: {
-      x: 0,
-      y: 0,
-      opacity: 1,
-    },
-  };
   const { y } = useWindowScroll();
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    y > 100 ? setShow(true) : setShow(false);
-  }, [y]);
-  useEffect(() => {
-    show ? controls.start("visible") : controls.start("hidden");
-  }, [show]);
+  const show = useMemo(() => y > 100, [y]);
 
   return (
-    <motion.div
-      initial="hidden"
-      animate={controls}
-      variants={variants}
-      className="fixed bottom-5 right-5"
-    >
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="h-11 w-11 rounded-full p-0"
-              aria-label="Press to return to top"
-            >
-              <ChevronUp />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent sideOffset={6}>
-            <p>Return</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </motion.div>
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={variants}
+          className="fixed bottom-5 right-5"
+        >
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="h-11 w-11 rounded-full p-0"
+                  aria-label="Press to return to top"
+                >
+                  <ChevronUp />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent sideOffset={6}>
+                <p>Return</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

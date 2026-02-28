@@ -1,3 +1,7 @@
+/**
+ * Button: shadcn/ui button primitive with variant and size support.
+ * Supports polymorphism via `asChild` (renders as Radix Slot).
+ */
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";

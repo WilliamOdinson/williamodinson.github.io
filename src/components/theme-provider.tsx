@@ -1,3 +1,13 @@
+/**
+ * ThemeProvider: React context that manages and persists the light/dark theme.
+ *
+ * Initialization priority:
+ *  1. `localStorage("theme")`: user's explicit choice.
+ *  2. `prefers-color-scheme` media query: OS-level preference.
+ *  3. Fallback to "light".
+ *
+ * The provider toggles the `.dark` class on `<html>` so Tailwind's dark mode works.
+ */
 "use client";
 
 import {
@@ -14,24 +24,22 @@ type ThemeCtx = { theme: Theme; toggle: () => void };
 const ThemeContext = createContext<ThemeCtx | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light"); // temporary value
+  const [theme, setTheme] = useState<Theme>("light"); // SSR-safe default
 
-  /* 1. Read initial theme before first paint */
+  /* Read the persisted or system theme once on mount. */
   useEffect(() => {
     let initial: Theme = "light";
 
-    /* (a) stored preference? */
     const stored = localStorage.getItem("theme") as Theme | null;
     if (stored === "light" || stored === "dark") {
       initial = stored;
     } else {
-      /* (b) system preference */
       try {
         initial = window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
           : "light";
       } catch {
-        /* (c) silently keep "light" */
+        /* Keep "light" on failure */
       }
     }
 
@@ -39,11 +47,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.classList.toggle("dark", initial === "dark");
   }, []);
 
-  /* 2. Toggle theme and persist */
+  /** Toggle between light and dark, persisting the choice to localStorage. */
   const toggle = () => {
     setTheme((prev) => {
       const next: Theme = prev === "dark" ? "light" : "dark";
-      localStorage.setItem("theme", next); // first write = breaks "auto"
+      localStorage.setItem("theme", next);
       document.documentElement.classList.toggle("dark", next === "dark");
       return next;
     });
@@ -56,6 +64,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/** Hook to access the current theme and toggle function. */
 export const useTheme = () => {
   const ctx = useContext(ThemeContext);
   if (!ctx) {

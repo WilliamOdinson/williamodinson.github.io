@@ -1,3 +1,7 @@
+/**
+ * BlogIndex: Full blog listing page with client-side search.
+ * Renders a search bar and a staggered-animated list of posts filtered by query.
+ */
 "use client";
 
 import { useState, useMemo } from "react";
@@ -7,9 +11,26 @@ import Link from "next/link";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/** Staggered reveal for the list container. */
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
+};
+
+/** Slide-up animation for each list item. */
+const itemVariants = {
+  hidden: { y: 16, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { type: "spring", stiffness: 180, damping: 20 },
+  },
+};
+
 export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
   const [q, setQ] = useState("");
 
+  /** Filter posts by title or summary matching the search query. */
   const filtered = useMemo(
     () =>
       posts.filter((p) =>
@@ -18,23 +39,9 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
     [q, posts],
   );
 
-  /* animation presets */
-  const container = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
-  };
-  const item = {
-    hidden: { y: 16, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 180, damping: 20 },
-    },
-  };
-
   return (
     <section className="space-y-8">
-      {/* heading + search */}
+      {/* Heading + search bar */}
       <header className="space-y-4">
         <p className="text-muted-foreground">
           Articles on System Design. Search by title or summary.
@@ -57,15 +64,15 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
         </label>
       </header>
 
-      {/* list without bullets or lift effect */}
+      {/* Animated post list */}
       <motion.ul
-        variants={container}
+        variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="animated-list flex list-none flex-col"
       >
         {filtered.map((p) => (
-          <motion.li key={p.slug} variants={item} className="py-2.5">
+          <motion.li key={p.slug} variants={itemVariants} className="py-2.5">
             <section className="flex flex-col gap-1 md:flex-row md:gap-9">
               <time className="shrink-0 text-sm text-muted-foreground md:w-40 md:text-base">
                 {new Intl.DateTimeFormat("en-US", {

@@ -1,3 +1,7 @@
+/**
+ * Tooltip: shadcn/ui tooltip built on Radix UI primitives.
+ * Provides animated enter/exit and positional awareness.
+ */
 "use client";
 
 import * as React from "react";

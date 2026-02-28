@@ -1,3 +1,7 @@
+/**
+ * ProjectsIndex: Full chronological list of projects with cover images.
+ * Rendered on the /projects page. Each row links to GitHub and to the detail page.
+ */
 "use client";
 
 import Image from "next/image";
@@ -5,61 +9,65 @@ import Link from "next/link";
 import { ProjectMeta } from "@/lib/get-projects";
 import { motion } from "framer-motion";
 
-function fmt(date: string) {
-  return new Intl.DateTimeFormat("en", {
-    month: "short",
-    year: "numeric",
-  }).format(new Date(date));
+const GITHUB_PREFIX = "https://github.com/";
+const PLACEHOLDER_IMG = "https://placehold.co/600x338";
+
+/** Cached formatter for "Mon YYYY" style dates. */
+const dateFmt = new Intl.DateTimeFormat("en", {
+  month: "short",
+  year: "numeric",
+});
+
+/** Format a project period (start: end) into a human-readable string. */
+function formatPeriod(period: ProjectMeta["period"]) {
+  const start = dateFmt.format(new Date(period.start));
+  const end = period.end ? dateFmt.format(new Date(period.end)) : "Present";
+  return `${start} - ${end}`;
 }
 
-export default function ProjectsIndex({ items }: { items: ProjectMeta[] }) {
-  const container = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.1 } },
-  };
-  const row = {
-    hidden: { opacity: 0, y: 16 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: "spring", stiffness: 180, damping: 22 },
-    },
-  };
+/** Stagger timing for the list container. */
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
 
+/** Slide-up animation for each row. */
+const rowVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 180, damping: 22 },
+  },
+};
+
+export default function ProjectsIndex({ items }: { items: ProjectMeta[] }) {
   return (
     <motion.ul
-      variants={container}
+      variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       className="flex list-none flex-col gap-14"
     >
       {items.map((p) => {
-        const period =
-          p.period.start && p.period.end
-            ? `${fmt(p.period.start)} - ${fmt(p.period.end)}`
-            : `${fmt(p.period.start)} - Present`;
-
-        /* fall-back image when no cover is provided */
         const imgSrc =
-          p.cover && p.cover.trim().length
-            ? p.cover
-            : "https://placehold.co/600x338";
+          p.cover && p.cover.trim().length ? p.cover : PLACEHOLDER_IMG;
 
         return (
-          <motion.li key={p.slug} variants={row}>
+          <motion.li key={p.slug} variants={rowVariants}>
             <section className="flex flex-col items-start gap-1 md:flex-row md:gap-8">
-              {/* date column */}
+              {/* Date range column */}
               <span className="shrink-0 text-sm text-muted-foreground md:w-40 md:text-base">
-                {period}
+                {formatPeriod(p.period)}
               </span>
 
-              {/* right-hand column */}
+              {/* Content column */}
               <div className="flex flex-1 flex-col gap-0">
-                {/* title, description, details */}
                 <div className="flex flex-col gap-0.5">
+                  {/* Link to GitHub repo */}
                   <Link
-                    href={`${"https://github.com/"}${p.title}`}
+                    href={`${GITHUB_PREFIX}${p.title}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-lg font-semibold no-underline transition-colors hover:text-blue-600 dark:text-white dark:hover:text-blue-400 md:text-xl"
@@ -71,6 +79,7 @@ export default function ProjectsIndex({ items }: { items: ProjectMeta[] }) {
                     {p.description}
                   </p>
 
+                  {/* Link to local detail page */}
                   <Link
                     href={`/projects/${p.slug}`}
                     className="text-sm underline underline-offset-4 md:text-base"
@@ -79,7 +88,7 @@ export default function ProjectsIndex({ items }: { items: ProjectMeta[] }) {
                   </Link>
                 </div>
 
-                {/* cover image */}
+                {/* Cover image */}
                 <Link
                   href={`/projects/${p.slug}`}
                   className="mx-auto block w-full overflow-hidden rounded-xl md:h-[338px] md:w-[600px]"

@@ -1,3 +1,7 @@
+/**
+ * Lightbox: Full-screen overlay for viewing images.
+ * Opens with a scale-in animation; closes on backdrop click or Escape key.
+ */
 "use client";
 
 import { useCallback, useEffect } from "react";
@@ -11,6 +15,7 @@ interface LightboxProps {
 }
 
 export default function Lightbox({ src, alt, open, onClose }: LightboxProps) {
+  /** Close on Escape key press. */
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -18,6 +23,7 @@ export default function Lightbox({ src, alt, open, onClose }: LightboxProps) {
     [onClose],
   );
 
+  /* Bind/unbind keyboard listener and lock body scroll while open. */
   useEffect(() => {
     if (open) {
       document.addEventListener("keydown", handleKey);
@@ -40,10 +46,10 @@ export default function Lightbox({ src, alt, open, onClose }: LightboxProps) {
           transition={{ duration: 0.2 }}
           onClick={onClose}
         >
-          {/* backdrop */}
+          {/* Semi-transparent backdrop */}
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
-          {/* close button */}
+          {/* Close button */}
           <button
             onClick={onClose}
             aria-label="Close lightbox"
@@ -66,7 +72,7 @@ export default function Lightbox({ src, alt, open, onClose }: LightboxProps) {
             </svg>
           </button>
 
-          {/* image */}
+          {/* The full-size image */}
           <motion.img
             src={src}
             alt={alt || ""}
@@ -78,7 +84,7 @@ export default function Lightbox({ src, alt, open, onClose }: LightboxProps) {
             onClick={(e) => e.stopPropagation()}
           />
 
-          {/* caption */}
+          {/* Optional alt-text caption */}
           {alt && (
             <motion.p
               className="absolute bottom-6 z-[101] max-w-lg text-center text-sm text-white/70"
