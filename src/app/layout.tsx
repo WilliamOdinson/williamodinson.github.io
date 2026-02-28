@@ -75,6 +75,45 @@ export default function RootLayout({
         <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
         <link rel="author" type="text/plain" href="/humans.txt" />
         <link rel="robots" href="/robots.txt" />
+
+        {/* JSON-LD: Person + WebSite structured data for rich search results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Person",
+                name: "Yiqing Sun",
+                alternateName: "William Sun",
+                url: "https://williamodinson.github.io",
+                image: "https://williamodinson.github.io/selfie.jpg",
+                jobTitle: "Software Engineer",
+                alumniOf: [
+                  {
+                    "@type": "CollegeOrUniversity",
+                    name: "Carnegie Mellon University",
+                  },
+                  {
+                    "@type": "CollegeOrUniversity",
+                    name: "Tianjin University",
+                  },
+                ],
+                sameAs: [
+                  "https://github.com/williamodinson",
+                  "https://linkedin.com/in/williamodinson",
+                  "https://x.com/william18652",
+                ],
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Yiqing Sun",
+                url: "https://williamodinson.github.io",
+              },
+            ]),
+          }}
+        />
       </head>
 
       <body className={montserrat.className}>

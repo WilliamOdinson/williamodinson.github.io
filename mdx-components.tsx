@@ -10,10 +10,12 @@ import type { MDXComponents } from "mdx/types";
 import Mermaid from "@/components/mermaid";
 import CodeBlock from "@/components/code-block";
 import MdxImage from "@/components/mdx-image";
+import JsonLd from "@/components/json-ld";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     Mermaid,
+    JsonLd,
     pre: CodeBlock,
     img: MdxImage,
     ...components,
