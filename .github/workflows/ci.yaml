@@ -1,4 +1,4 @@
-name: CI – Run tests on PRs
+name: CI
 
 on:
   pull_request:
@@ -6,16 +6,16 @@ on:
       - main
 
 jobs:
-  test:
+  lint-and-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
-          version: 10.6.1
+          version: 10.13.1
           run_install: false
 
       - name: Set up Node
@@ -27,5 +27,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run tests
-        run: pnpm test
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build

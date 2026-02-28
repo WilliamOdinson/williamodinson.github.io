@@ -33,9 +33,9 @@ jobs:
 
       # 3. install pnpm itself (the action just drops the executable)
       - name: Set up pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
-          version: 10.6.1
+          version: 10.13.1
           run_install: false
 
       # 4. install Node and enable the built-in pnpm-store cache
