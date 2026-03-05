@@ -67,18 +67,18 @@ export default function Hero() {
 
       {/* Animated taglines */}
       <h1>
-        <MotionDiv delayOffset={0.7}>Software Development 🧑🏻‍💻</MotionDiv>
+        <MotionDiv delayOffset={0.4}>Software Development 🧑🏻‍💻</MotionDiv>
       </h1>
       <h1>
-        <MotionDiv delayOffset={0.85}>Fitness Enthusiast 🏋🏻‍♂️</MotionDiv>
+        <MotionDiv delayOffset={0.5}>Fitness Enthusiast 🏋🏻‍♂️</MotionDiv>
       </h1>
 
       {/* Introductory text */}
       <div className="my-6 flex w-full flex-col gap-2 text-center lg:w-[50%]">
-        <MotionDiv delayOffset={1.0}>
+        <MotionDiv delayOffset={0.6}>
           <p>Welcome to my personal page!</p>
         </MotionDiv>
-        <MotionDiv delayOffset={1.1}>
+        <MotionDiv delayOffset={0.65}>
           <p>
             Build cool stuff, learn new things, and share my journey with
             others.
@@ -88,11 +88,11 @@ export default function Hero() {
 
       {/* Social / contact icons */}
       <div className="my-5">
-        <ContactList delayOffset={1.2} showWhenInView={false} />
+        <ContactList delayOffset={0.7} showWhenInView={false} />
       </div>
 
       {/* Résumé download button (opens Google Docs viewer) */}
-      <MotionDiv delayOffset={1.35}>
+      <MotionDiv delayOffset={0.8}>
         <Button asChild>
           <Link
             href={RESUME_URL}
