@@ -20,13 +20,13 @@ export default function MotionDiv({
   return (
     <motion.div
       className={cn("relative flex items-center justify-center", className)}
-      initial={{ y: 100, opacity: 0 }}
+      initial={{ y: 20, opacity: 0 }}
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true }}
       transition={{
         type: "spring",
-        damping: 30,
-        stiffness: 200,
+        damping: 22,
+        stiffness: 260,
         delay: delayOffset,
       }}
     >
