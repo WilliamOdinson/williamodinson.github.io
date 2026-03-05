@@ -14,12 +14,7 @@ import MotionDiv from "@/components/motion-div";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 
-/** Google Docs viewer link wrapping the latest résumé PDF from GitHub Releases. */
-const RESUME_URL =
-  "https://docs.google.com/gview?embedded=1&url=" +
-  encodeURIComponent(
-    "https://github.com/WilliamOdinson/williamodinson.github.io/releases/latest/download/resume.pdf",
-  );
+const RESUME_URL = "https://williamodinson.github.io/Resume.pdf";
 
 export default function Hero() {
   return (
