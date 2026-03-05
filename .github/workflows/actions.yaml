@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+  release:
+    types:
+      - edited
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -53,7 +57,13 @@ jobs:
       - name: Build website
         run: pnpm run build
 
-      # 7. push the static out/ folder to the Pages artifact store
+      # 7. inject resume PDF from latest release
+      - name: Download resume from latest release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release download resume --pattern "Resume.pdf" --dir out/ --clobber
+
+      # 8. push the static out/ folder to the Pages artifact store
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
