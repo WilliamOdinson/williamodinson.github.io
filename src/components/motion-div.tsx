@@ -26,7 +26,7 @@ export default function MotionDiv({
       transition={{
         type: "spring",
         damping: 22,
-        stiffness: 260,
+        stiffness: 320,
         delay: delayOffset,
       }}
     >

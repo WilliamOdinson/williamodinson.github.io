@@ -36,7 +36,7 @@ export default function MotionText({
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{
-            delay: index * 0.03 + delayOffset,
+            delay: index * 0.02 + delayOffset,
             type: "spring",
             damping: 15,
             stiffness: 400,
