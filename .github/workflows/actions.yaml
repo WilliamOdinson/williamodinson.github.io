@@ -61,7 +61,7 @@ jobs:
       - name: Download resume from latest release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release download resume --pattern "Resume.pdf" --dir out/ --clobber
+        run: gh release download resume --pattern "resume.pdf" --dir out/ --clobber
 
       # 8. push the static out/ folder to the Pages artifact store
       - name: Upload Pages artifact
