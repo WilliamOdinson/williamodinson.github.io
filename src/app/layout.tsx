@@ -18,6 +18,7 @@ import GridBackground from "@/components/grid-background";
 import { ThemeProvider } from "@/components/theme-provider";
 import Script from "next/script";
 import Footer from "@/components/footer";
+import GoatCounterScript from "@/components/goatcounter-script";
 import { author, site } from "@/lib/site.config.mjs";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -113,6 +114,7 @@ export default function RootLayout({
           <Footer />
           <BackToTop />
         </ThemeProvider>
+        <GoatCounterScript />
       </body>
     </html>
   );

@@ -35,3 +35,14 @@ export const rss = {
   title: "Blog by William Sun",
   description: "Articles on Software Engineering, AI, etc.",
 };
+
+/**
+ * GoatCounter: free, privacy-friendly web analytics.
+ * 1. Sign up at https://www.goatcounter.com (free for personal use)
+ * 2. Create a site and get your site code (e.g. "williamodinson")
+ * 3. Replace the empty string below with your site code
+ * 4. Enable "Allow public access to count API" in GoatCounter Settings → Sites
+ */
+export const goatcounter = {
+  siteCode: "williamodinson",
+};

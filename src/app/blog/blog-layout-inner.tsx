@@ -9,6 +9,7 @@
 
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
+import ViewCounter from "@/components/view-counter";
 
 /** Lazy-load Giscus to avoid loading the script on every blog navigation. */
 const GiscusComments = dynamic(() => import("@/components/giscus-comments"), {
@@ -26,6 +27,11 @@ export default function BlogLayoutInner({
 
   return (
     <section className="container mx-auto py-10 lg:px-28">
+      {showComments && (
+        <div className="mb-4">
+          <ViewCounter path={pathname} />
+        </div>
+      )}
       <article className="prose max-w-none dark:prose-invert">
         {children}
       </article>
