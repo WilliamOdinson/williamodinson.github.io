@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ViewCounter from "@/components/view-counter";
 
 /** Cached formatter for "Mon DD, YYYY" style dates. */
 const dateFmt = new Intl.DateTimeFormat("en-US", {
@@ -81,9 +82,12 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
         {filtered.map((p) => (
           <motion.li key={p.slug} variants={itemVariants} className="py-2.5">
             <section className="flex flex-col gap-1 md:flex-row md:gap-9">
-              <time className="shrink-0 text-sm text-muted-foreground md:w-40 md:text-base">
-                {dateFmt.format(new Date(p.date))}
-              </time>
+              <div className="flex shrink-0 items-center gap-3 md:w-40">
+                <time className="text-sm text-muted-foreground md:text-base">
+                  {dateFmt.format(new Date(p.date))}
+                </time>
+                <ViewCounter path={`/blog/${p.slug}`} />
+              </div>
               <Link
                 href={`/blog/${p.slug}`}
                 className="text-base no-underline transition-colors hover:text-blue-600 dark:text-white
