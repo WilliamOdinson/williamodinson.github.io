@@ -24,11 +24,11 @@ jobs:
     steps:
       # 1. grab the source
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # 2. restore the incremental compiler output that Next.js keeps in .next/cache
       - name: Restore Next.js build cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]sx', '**/*.ts', '**/*.tsx') }}
@@ -44,9 +44,9 @@ jobs:
 
       # 4. install Node and enable the built-in pnpm-store cache
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       # 5. install project packages
