@@ -39,7 +39,7 @@ jobs:
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.31.0
+          version: 10.33.0
           run_install: false
 
       # 4. install Node and enable the built-in pnpm-store cache
