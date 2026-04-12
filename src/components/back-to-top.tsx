@@ -4,7 +4,7 @@
  */
 "use client";
 
-import { useWindowScroll } from "react-use";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -22,8 +22,15 @@ const variants = {
 };
 
 export default function BackToTop() {
-  const { y } = useWindowScroll();
-  const show = y > 100;
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handler = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  const show = scrollY > 100;
 
   return (
     <AnimatePresence>

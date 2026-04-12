@@ -30,20 +30,18 @@
     "next": "15.5.14",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "~5.5.0",
     "react-syntax-highlighter": "~15.6.1",
-    "react-use": "^17.6.0",
     "rehype-stringify": "~10.0.1",
     "remark-mdx": "~3.1.0",
     "remark-parse": "~11.0.0",
     "remark-rehype": "~11.1.2",
-    "sharp": "^0.33.2",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "unified": "~11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@mdx-js/react": "~3.1.0",
     "@next/eslint-plugin-next": "15.5.12",
     "@tailwindcss/typography": "~0.5.16",
     "@types/mdx": "~2.0.13",
@@ -57,7 +55,6 @@
     "postcss": "8.4.35",
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "react-icons": "~5.5.0",
     "remark-frontmatter": "~5.0.0",
     "remark-mdx-frontmatter": "~5.2.0",
     "tailwindcss": "3.4.1",
@@ -66,9 +63,6 @@
   },
   "packageManager": "pnpm@10.33.0",
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp"
-    ],
     "overrides": {
       "trim-newlines": "3.0.1",
       "brace-expansion": ">=2.0.3",
