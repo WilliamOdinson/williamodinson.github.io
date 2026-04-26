@@ -14,7 +14,7 @@ import MotionDiv from "@/components/motion-div";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 
-const RESUME_URL = "https://williamodinson.github.io/resume.pdf";
+const RESUME_URL = "https://wsun.io/resume.pdf";
 
 export default function Hero() {
   return (

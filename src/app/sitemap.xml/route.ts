@@ -16,7 +16,7 @@ import crypto from "crypto";
 
 export const dynamic = "force-static";
 
-const BASE = "https://williamodinson.github.io";
+const BASE = "https://wsun.io";
 
 /** A single `<url>` entry in the sitemap. */
 type UrlEntry = {
@@ -95,7 +95,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhash="https://williamodinson.github.io/ns/hash">
+  xmlns:xhash="https://wsun.io/ns/hash">
 ${urls}
 </urlset>`;
 

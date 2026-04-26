@@ -24,7 +24,7 @@ export const author = {
 };
 
 export const site = {
-  url: "https://williamodinson.github.io",
+  url: "https://wsun.io",
   title: "William Sun",
   description:
     "William Sun's personal portfolio — Software Engineering, AI, and more",

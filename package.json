@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "homepage": "https://williamodinson.github.io",
+  "homepage": "https://wsun.io",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
