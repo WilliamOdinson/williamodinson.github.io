@@ -1,0 +1,248 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+
+  * {
+    @apply scroll-smooth border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 2.7rem;
+    }
+  }
+
+  /* Underline-on-hover for top-nav links — uses currentColor for dark mode */
+  .nav-links > * {
+    @apply relative;
+  }
+
+  @media (min-width: 768px) {
+    .nav-links > *::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1.25px;
+      background: currentColor;
+      transition: width 0.2s ease-out;
+    }
+
+    .nav-links > *:hover::after {
+      width: 100%;
+    }
+  }
+
+  /* Inline code in prose: remove fake backticks, add subtle background */
+  .prose :not(pre) > code::before,
+  .prose :not(pre) > code::after {
+    content: none;
+  }
+
+  .prose :not(pre) > code {
+    font-weight: 400;
+    background: hsl(var(--secondary));
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+}
+
+/* ── Code-block copy button (moved from inline <style jsx>) ─────── */
+.copy-btn {
+  --bg: hsl(var(--secondary));
+  --bg-hover: hsl(var(--secondary) / 0.85);
+  --icon: hsl(var(--secondary-foreground));
+  --icon-hover: hsl(var(--primary));
+  --tooltip-bg: hsl(var(--popover));
+  --tooltip-text: hsl(var(--popover-foreground));
+  --radius: 10px;
+  --d: 36px;
+  --pad: 7px;
+  --offset: 8px;
+  --font: 12px Menlo, "Roboto Mono", monospace;
+
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: var(--d);
+  height: var(--d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--icon);
+  border: none;
+  cursor: pointer;
+}
+
+.copy-btn svg {
+  pointer-events: none;
+}
+
+.copy-btn .checkmark {
+  display: none;
+}
+
+.copy-btn[data-copied="true"] .clipboard {
+  display: none;
+}
+
+.copy-btn[data-copied="true"] .checkmark {
+  display: block;
+}
+
+.copy-btn:hover,
+.copy-btn:focus-visible {
+  background: var(--bg-hover);
+}
+
+.copy-btn:hover svg,
+.copy-btn:focus-visible svg {
+  color: var(--icon-hover);
+}
+
+.copy-btn .copy-tooltip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  font: var(--font);
+  color: var(--tooltip-text);
+  background: var(--tooltip-bg);
+  white-space: nowrap;
+  padding: var(--pad);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.copy-btn .copy-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: calc(var(--pad) * -0.5);
+  left: 50%;
+  width: var(--pad);
+  height: var(--pad);
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.copy-btn .copy-tooltip::before {
+  content: attr(data-text-initial);
+}
+
+.copy-btn[data-copied="true"] .copy-tooltip::before {
+  content: attr(data-text-end);
+}
+
+.copy-btn:hover .copy-tooltip,
+.copy-btn:focus-visible .copy-tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: calc((100% + var(--offset)) * -1);
+}
+
+@layer utilities {
+  .hover-lift {
+    @apply transition-transform duration-200 ease-linear;
+  }
+
+  .hover-lift:hover {
+    @apply -translate-y-1 shadow-lg;
+  }
+
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .safari-mask-fix {
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
+  }
+}
