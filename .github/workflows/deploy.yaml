@@ -1,0 +1,63 @@
+name: Deploy static Next.js site to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. grab the source
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # 2. restore the incremental compiler output that Next.js keeps in .next/cache
+      - name: Restore Next.js build cache
+        uses: actions/cache@v5
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{
+            hashFiles('**/*.[jt]sx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
+      # 3. install pnpm itself (the action just drops the executable)
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      # 4. install Node and enable the built-in pnpm-store cache
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # 5. install project packages
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 6. compile and export the site
+      - name: Build website
+        run: pnpm run build
+
+      # 7. inject resume PDF from latest release
+      - name: Download resume from latest release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release download resume --pattern "resume.pdf" --dir out/ --clobber
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out/ --project-name=williamodinson
