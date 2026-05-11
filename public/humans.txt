@@ -1,0 +1,19 @@
+/* AUTHOR */
+Developer:  William Sun
+Email:      earthsuperman@outlook.com
+GitHub:     https://github.com/williamodinson
+LinkedIn:   https://linkedin.com/in/williamodinson
+
+/* PROJECT */
+Repository: https://github.com/WilliamOdinson/williamodinson.github.io
+License:    MIT
+Launched:   2025-07-02
+
+/* THANKS */
+Based on:   eric-portfolio-website by Eric Huang (https://github.com/erich2s/eric-portfolio-website)
+Icons:      Font Awesome 6, Lucide React
+Fonts:      Montserrat (Google Fonts), GoldenSignature (local)
+UI Lib:     Radix UI
+Special ▲:  Community contributors & open-source maintainers
+
+/* END */
