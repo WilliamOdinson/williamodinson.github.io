@@ -1,8 +1,8 @@
-# Personal Portfolio Website
+# Personal Website
 
-Personal portfolio and blog: **[williamodinson.github.io](https://williamodinson.github.io)**
+Personal website and blog: **[wsun.io](https://wsun.io)**
 
-Built with Next.js 15 (static export), React 18, TypeScript, Tailwind CSS 3.4, shadcn/ui, Framer Motion 11, and MDX. Blog comments powered by Giscus. Auto-deployed to GitHub Pages via GitHub Actions.
+Built with Next.js 15 (static export), React 18, TypeScript, Tailwind CSS 3.4, shadcn/ui, Framer Motion 11, and MDX. Blog comments powered by Giscus. Auto-deployed to Cloudflare Pages via GitHub Actions.
 
 ## Quickstart
 
@@ -27,7 +27,18 @@ pnpm build        # Production build, static export to out/
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/actions.yaml`, which runs `pnpm install` then `pnpm build` and deploys the `out/` directory to GitHub Pages. The site goes live within ~2 minutes.
+Pushing to `main` triggers `.github/workflows/deploy.yaml`, which runs `pnpm install` then `pnpm build` and deploys the `out/` directory to Cloudflare Pages.
+
+```mermaid
+%%{init: {'look': 'handDrawn', 'theme': 'neutral'}}%%
+graph LR
+    A[Push to main] --> B[GitHub Actions]
+    B --> C[pnpm install]
+    C --> D[pnpm build]
+    D --> E[out/]
+    E --> F[Cloudflare Pages]
+    F --> G[wsun.io]
+```
 
 To preview a production build locally:
 
@@ -54,26 +65,4 @@ featured: true
 Your markdown content here.
 ```
 
-**New project:** `src/app/projects/<slug>/page.mdx`
-
-```mdx
----
-repo: "WilliamOdinson/my-project"
-description: "Short tagline."
-stars: 0
-tags: ["Python", "Django"]
-cover: "/projects/<slug>/cover.png"
-period:
-  start: 2025-01-01
-  end: 2025-06-30
-featured: true
----
-
-Your markdown content here.
-```
-
-Place cover images at `public/projects/<slug>/`. Set `featured: true` to show on the homepage.
-
-## License
-
-[MIT](./LICENSE) © 2025 Yiqing Sun
+Set `featured: true` to show on the homepage.
