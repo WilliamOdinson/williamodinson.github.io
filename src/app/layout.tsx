@@ -10,7 +10,7 @@
  */
 import "./globals.css";
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Montserrat, JetBrains_Mono } from "next/font/google";
 
 import Header from "@/components/header";
 import BackToTop from "@/components/back-to-top";
@@ -22,6 +22,10 @@ import GoatCounterScript from "@/components/goatcounter-script";
 import { author, site } from "@/lib/site.config.mjs";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: site.title,
@@ -104,7 +108,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body className={montserrat.className}>
+      <body className={`${montserrat.className} ${jetbrainsMono.variable}`}>
         <ThemeProvider>
           <Header />
           <GridBackground />

@@ -123,6 +123,7 @@
   }
 
   .prose :not(pre) > code {
+    font-family: var(--font-mono), monospace;
     font-weight: 400;
     background: hsl(var(--secondary));
     padding: 0.15em 0.4em;
@@ -143,7 +144,7 @@
   --d: 36px;
   --pad: 7px;
   --offset: 8px;
-  --font: 12px Menlo, "Roboto Mono", monospace;
+  --font: 12px var(--font-mono), monospace;
 
   position: absolute;
   top: 0.5rem;

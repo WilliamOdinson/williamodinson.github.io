@@ -65,7 +65,7 @@ export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
           background: "transparent",
         }}
         codeTagProps={{
-          style: { fontFamily: "Menlo, Roboto Mono, monospace" },
+          style: { fontFamily: "var(--font-mono), monospace" },
         }}
       >
         {rawCode}
