@@ -26,36 +26,21 @@ export default function Hero() {
         </MotionText>
       </h1>
 
-      {/* Animoji video avatar: shows light or dark version via CSS opacity */}
+      {/* Animoji video avatar */}
       <div className="safari-mask-fix relative overflow-hidden rounded-full p-3 md:p-4">
-        <MotionDiv className="relative">
-          {/* Light-mode video */}
+        {/* 外层容器保持原来的大小，并使用 flex 居中 */}
+        <MotionDiv className="relative flex items-center justify-center h-[170px] w-[170px] md:h-[190px] md:w-[190px]">
           <video
             className="
-                h-[170px] w-[170px] opacity-100 dark:opacity-0
-                md:h-[190px] md:w-[190px]
-              "
+              h-[80%] w-[80%]
+              object-contain
+            "
             muted
             autoPlay
             loop
             playsInline
             style={{ backgroundColor: "transparent" }}
-            src="/animoji-light.mp4"
-          />
-
-          {/* Dark-mode video (overlaid, toggled via opacity) */}
-          <video
-            className="
-                absolute left-0 top-0
-                h-[170px] w-[170px] opacity-0 dark:opacity-100
-                md:h-[190px] md:w-[190px]
-              "
-            muted
-            autoPlay
-            loop
-            playsInline
-            style={{ backgroundColor: "transparent" }}
-            src="/animoji-dark.mp4"
+            src="/animoji.webm"
           />
         </MotionDiv>
       </div>
