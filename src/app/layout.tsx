@@ -110,9 +110,15 @@ export default function RootLayout({
 
       <body className={`${montserrat.className} ${jetbrainsMono.variable}`}>
         <ThemeProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+          >
+            Skip to main content
+          </a>
           <Header />
           <GridBackground />
-          <main className="container overflow-x-hidden pt-20 lg:px-28">
+          <main id="main-content" className="container overflow-x-hidden pt-20 lg:px-28">
             {children}
           </main>
           <Footer />

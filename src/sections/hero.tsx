@@ -35,10 +35,14 @@ export default function Hero() {
               h-[80%] w-[80%]
               object-contain
             "
+            width={152}
+            height={152}
             muted
             autoPlay
             loop
             playsInline
+            aria-label="Animated Animoji avatar of William Sun"
+            role="img"
             style={{ backgroundColor: "transparent" }}
             src="/animoji.webm"
           />
@@ -46,12 +50,12 @@ export default function Hero() {
       </div>
 
       {/* Animated taglines */}
-      <h1>
+      <div className="text-[2rem] font-bold md:text-[2.7rem]">
         <MotionDiv delayOffset={0.4}>Software Developer 🧑🏻‍💻</MotionDiv>
-      </h1>
-      <h1>
+      </div>
+      <div className="text-[2rem] font-bold md:text-[2.7rem]">
         <MotionDiv delayOffset={0.5}>Fitness Enthusiast 🏋🏻‍♂️</MotionDiv>
-      </h1>
+      </div>
 
       {/* Introductory text */}
       <div className="my-6 flex w-full flex-col gap-2 text-center lg:w-[50%]">

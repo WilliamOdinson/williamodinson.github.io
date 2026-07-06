@@ -10,7 +10,7 @@ import { author } from "@/lib/site.config.mjs";
 
 export default function Footer() {
   return (
-    <footer className="mt-24 flex flex-col items-center gap-4 py-8 text-sm text-muted-foreground">
+    <footer aria-label="Site footer" className="mt-24 flex flex-col items-center gap-4 py-8 text-sm text-muted-foreground">
       {/* Static resource links */}
       <p className="flex gap-6">
         <a

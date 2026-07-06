@@ -15,7 +15,7 @@ export default function GoatCounterScript() {
     <script
       data-goatcounter={`https://${goatcounter.siteCode}.goatcounter.com/count`}
       async
-      src="//gc.zgo.at/count.js"
+      src="https://gc.zgo.at/count.js"
     />
   );
 }

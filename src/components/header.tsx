@@ -25,6 +25,7 @@ const nav = [
 export default function Header() {
   return (
     <nav
+      aria-label="Main navigation"
       className="
         fixed left-0 top-0 z-50 flex w-full select-none justify-center
         bg-background/80 py-4 font-light backdrop-blur md:px-28
