@@ -28,7 +28,7 @@ export default function Hero() {
 
       {/* Animoji video avatar */}
       <div className="safari-mask-fix relative overflow-hidden rounded-full p-3 md:p-4">
-        {/* 外层容器保持原来的大小，并使用 flex 居中 */}
+        {/* Outer container keeps the original size and centers content with flex */}
         <MotionDiv className="relative flex items-center justify-center h-[170px] w-[170px] md:h-[190px] md:w-[190px]">
           <video
             className="
@@ -44,8 +44,10 @@ export default function Hero() {
             aria-label="Animated Animoji avatar of William Sun"
             role="img"
             style={{ backgroundColor: "transparent" }}
-            src="/animoji.webm"
-          />
+          >
+            <source src="/animoji.mov" type='video/quicktime; codecs="hvc1"' />
+            <source src="/animoji.webm" type="video/webm" />
+          </video>
         </MotionDiv>
       </div>
 
