@@ -83,27 +83,30 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
-              {
-                "@context": "https://schema.org",
-                "@type": "Person",
-                name: author.name,
-                url: site.url,
-                image: `${site.url}${author.image.src}`,
-                jobTitle: author.jobTitle,
-                alumniOf: author.education.map((name) => ({
-                  "@type": "CollegeOrUniversity",
-                  name,
-                })),
-                sameAs: Object.values(author.social),
-              },
-              {
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                name: site.title,
-                url: site.url,
-              },
-            ]),
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: author.name,
+              url: site.url,
+              image: `${site.url}${author.image.src}`,
+              jobTitle: author.jobTitle,
+              alumniOf: author.education.map((name) => ({
+                "@type": "CollegeOrUniversity",
+                name,
+              })),
+              sameAs: Object.values(author.social),
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: site.title,
+              url: site.url,
+            }),
           }}
         />
       </head>
