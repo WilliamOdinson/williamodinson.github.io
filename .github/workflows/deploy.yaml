@@ -30,13 +30,13 @@ jobs:
 
       # 3. install pnpm itself (the action just drops the executable)
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           run_install: false
 
       # 4. install Node and enable the built-in pnpm-store cache
       - name: Set up Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: pnpm
@@ -56,7 +56,7 @@ jobs:
         run: gh release download resume --pattern "resume.pdf" --dir out/ --clobber
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
