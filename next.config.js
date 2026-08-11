@@ -5,17 +5,16 @@
  * - Uses static export (`output: 'export'`) for GitHub Pages deployment.
  * - Disables image optimization (not available in static export mode).
  */
-const remarkFrontmatter = require('remark-frontmatter').default
-const remarkMdxFrontmatter = require('remark-mdx-frontmatter').default
+const path = require('path')
 
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: [
-      remarkFrontmatter,
-      [remarkMdxFrontmatter, { name: 'frontMatter' }],
-      require('./src/lib/remark-next-metadata.mjs').default,
-      require('./src/lib/remark-json-ld.mjs').default,
+      'remark-frontmatter',
+      ['remark-mdx-frontmatter', { name: 'frontMatter' }],
+      path.resolve(__dirname, 'src/lib/remark-next-metadata.mjs'),
+      path.resolve(__dirname, 'src/lib/remark-json-ld.mjs'),
     ],
     rehypePlugins: [],
   },
