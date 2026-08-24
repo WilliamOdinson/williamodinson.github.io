@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "clean": "rm -rf .next out",
+    "clean:all": "rm -rf .next out node_modules && pnpm install"
   },
   "homepage": "https://wsun.io",
   "dependencies": {
@@ -61,5 +63,5 @@
     "typescript": "5.3.3",
     "typescript-eslint": "^8.66.0"
   },
-  "packageManager": "pnpm@11.21.0"
+  "packageManager": "pnpm@11.23.0"
 }
