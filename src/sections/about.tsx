@@ -19,14 +19,12 @@ export default function About() {
         <MotionDiv delayOffset={0.2}>
           <h2 className="mb-3 w-full text-center md:mb-6">About Me</h2>
         </MotionDiv>
-        <article className="flex flex-col gap-4">
-          <MotionDiv delayOffset={0.4}>
+        <MotionDiv delayOffset={0.4}>
+          <article className="flex flex-col gap-4">
             <p>
               Hi, I'm {author.name}, a software engineer and current
               Master's student at Carnegie Mellon University.
             </p>
-          </MotionDiv>
-          <MotionDiv delayOffset={0.5}>
             <p>
               I build backend and cloud-native systems, mostly in Go and Python,
               with a focus on performance and distributed architecture. At CMU's
@@ -35,15 +33,13 @@ export default function About() {
               production challenges: large-scale data pipelines, Kubernetes
               deployments, and high-throughput service optimization.
             </p>
-          </MotionDiv>
-          <MotionDiv delayOffset={0.6}>
             <p>
               I grew up in China, studied Information Systems at Tianjin
               University, and have been writing software ever since. Most of my
               work is open source under the MIT License.
             </p>
-          </MotionDiv>
-        </article>
+          </article>
+        </MotionDiv>
       </div>
 
       {/* Portrait column */}

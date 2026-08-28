@@ -74,11 +74,11 @@ export default function Hero() {
 
       {/* Social / contact icons */}
       <div className="my-5">
-        <ContactList delayOffset={0.7} showWhenInView={false} />
+        <ContactList delayOffset={0.5} showWhenInView={false} />
       </div>
 
-      {/* Résumé download button (opens Google Docs viewer) */}
-      <MotionDiv delayOffset={0.8}>
+      {/* Résumé download button */}
+      <MotionDiv delayOffset={1.4}>
         <Button asChild>
           <Link
             href={RESUME_URL}
