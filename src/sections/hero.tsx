@@ -5,7 +5,7 @@
  */
 "use client";
 
-import Link from "next/link";
+
 import { author } from "@/lib/site.config.mjs";
 
 import ContactList from "@/components/contact-list";
@@ -80,14 +80,14 @@ export default function Hero() {
       {/* Résumé download button */}
       <MotionDiv delayOffset={1.4}>
         <Button asChild>
-          <Link
+          <a
             href={RESUME_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
             <Eye className="mr-2 h-4 w-4" />
             View My Résumé
-          </Link>
+          </a>
         </Button>
       </MotionDiv>
     </section>
