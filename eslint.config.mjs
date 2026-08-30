@@ -5,16 +5,8 @@ import nextPlugin from "@next/eslint-plugin-next";
 export default [
     js.configs.recommended,
     ...tseslint.configs.recommended,
-    {
-        files: ["**/*.{js,jsx,ts,tsx}"],
-        plugins: {
-            "@next/next": nextPlugin,
-        },
-        rules: {
-            ...nextPlugin.configs.recommended.rules,
-            ...nextPlugin.configs["core-web-vitals"].rules,
-        },
-    },
+    nextPlugin.flatConfig.recommended,
+    nextPlugin.flatConfig.coreWebVitals,
     {
         files: ["*.config.js", "*.config.ts", "*.config.mjs"],
         languageOptions: {
