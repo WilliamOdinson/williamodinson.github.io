@@ -15,7 +15,7 @@ export default async function BlogPage() {
   const posts = await getAllPosts();
 
   return (
-    <section className="mx-auto max-w-5xl px-4 py-16 lg:px-28">
+    <section className="px-4 py-16">
       <h1 className="mb-12 text-3xl font-bold dark:text-white">Blog</h1>
       <BlogIndex posts={posts} />
     </section>

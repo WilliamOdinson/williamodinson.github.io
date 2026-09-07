@@ -2,6 +2,10 @@
  * BlogLayoutInner: Client-side wrapper for blog pages.
  *
  * - Wraps content in Tailwind Typography prose classes.
+ * - Caps the column at `max-w-3xl` (768px) for a readable measure. It adds no
+ *   horizontal padding of its own: the root `<main>` in `app/layout.tsx`
+ *   already applies `lg:px-28`, and repeating it here used to collapse the
+ *   column to ~350px at 1024px viewports.
  * - Conditionally renders the Giscus comment section on individual
  *   post pages (hidden on the `/blog` index).
  */
@@ -26,7 +30,7 @@ export default function BlogLayoutInner({
   const showComments = pathname !== "/blog";
 
   return (
-    <section className="container mx-auto py-10 lg:px-28">
+    <section className="mx-auto max-w-3xl py-10">
       {showComments && (
         <div className="mb-4">
           <ViewCounter path={pathname} />
