@@ -8,26 +8,35 @@ on:
 permissions:
   contents: read
 
+# A new push to the same PR supersedes the run in progress.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint-and-build:
     runs-on: ubuntu-latest
     steps:
+      # 1. grab the source
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v6
+      # 2. restore the Turbopack build cache that Next.js keeps in .next/cache
+      - name: Restore Next.js build cache
+        uses: actions/cache@v6
         with:
-          run_install: false
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]sx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
-      - name: Set up Node
-        uses: actions/setup-node@v6
+      # 3. pnpm, Node, the pnpm store cache and `pnpm install --frozen-lockfile`.
+      - name: Set up pnpm and Node, install dependencies
+        uses: pnpm/setup@v2
         with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          runtime: node@22
+          cache: true
+          require-lockfile: true
 
       - name: Lint
         run: pnpm lint

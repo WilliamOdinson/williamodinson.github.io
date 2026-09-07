@@ -9,6 +9,11 @@ on:
 permissions:
   contents: read
 
+# Deploys run one at a time, in order; a queued run is never cancelled.
+concurrency:
+  group: deploy-cloudflare-pages
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -16,40 +21,30 @@ jobs:
     steps:
       # 1. grab the source
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      # 2. restore the incremental compiler output that Next.js keeps in .next/cache
+      # 2. restore the Turbopack build cache that Next.js keeps in .next/cache
       - name: Restore Next.js build cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{
-            hashFiles('**/*.[jt]sx', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]sx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
-      # 3. install pnpm itself (the action just drops the executable)
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v6
+      # 3. pnpm, Node, the pnpm store cache and `pnpm install --frozen-lockfile`.
+      - name: Set up pnpm and Node, install dependencies
+        uses: pnpm/setup@v2
         with:
-          run_install: false
+          runtime: node@22
+          cache: true
+          require-lockfile: true
 
-      # 4. install Node and enable the built-in pnpm-store cache
-      - name: Set up Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: pnpm
-
-      # 5. install project packages
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # 6. compile and export the site
+      # 4. compile and export the site
       - name: Build website
         run: pnpm run build
 
-      # 7. inject resume PDF from latest release
+      # 5. inject resume PDF from latest release
       - name: Download resume from latest release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
