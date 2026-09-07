@@ -121,7 +121,7 @@ export default function RootLayout({
           </a>
           <Header />
           <GridBackground />
-          <main id="main-content" className="container overflow-x-hidden pt-20 lg:px-28">
+          <main id="main-content" className="container overflow-x-hidden lg:px-28">
             {children}
           </main>
           <Footer />
