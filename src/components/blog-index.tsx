@@ -8,7 +8,7 @@ import { useState, useMemo } from "react";
 import { PostMeta } from "@/lib/get-posts";
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ViewCounter from "@/components/view-counter";
 
@@ -35,6 +35,18 @@ const itemVariants: Variants = {
     transition: { type: "spring", stiffness: 180, damping: 20 },
   },
 };
+
+/**
+ * Split a title into everything before its last word and the last word itself,
+ * e.g. "Go Reflection Deep Dive" -> ["Go Reflection Deep ", "Dive"].
+ * The last word is rendered in a `whitespace-nowrap` span together with the
+ * trailing arrow, so the arrow can never wrap onto a line of its own.
+ * Single-word titles come back as ["", title].
+ */
+function splitLastWord(title: string): [head: string, tail: string] {
+  const m = /^([\s\S]*\s)(\S+)\s*$/.exec(title);
+  return m ? [m[1], m[2]] : ["", title.trim()];
+}
 
 export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
   const [q, setQ] = useState("");
@@ -80,25 +92,46 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
         animate="visible"
         className="animated-list flex list-none flex-col"
       >
-        {filtered.map((p) => (
-          <motion.li key={p.slug} variants={itemVariants} className="py-2.5">
-            <section className="flex flex-col gap-1 md:flex-row md:gap-9">
-              <div className="flex shrink-0 items-center gap-3 md:w-40">
-                <time className="text-sm text-muted-foreground md:text-base">
-                  {dateFmt.format(new Date(p.date))}
-                </time>
-                <ViewCounter path={`/blog/${p.slug}`} />
-              </div>
-              <Link
-                href={`/blog/${p.slug}`}
-                className="text-base no-underline transition-colors hover:text-blue-600 dark:text-white
-                dark:hover:text-blue-400 md:text-base md:text-lg"
-              >
-                {p.title}
-              </Link>
-            </section>
-          </motion.li>
-        ))}
+        {filtered.map((p) => {
+          const [head, tail] = splitLastWord(p.title);
+
+          return (
+            <motion.li key={p.slug} variants={itemVariants} className="py-2.5">
+              <section className="flex flex-col gap-1 md:flex-row md:gap-9">
+                <div className="flex shrink-0 items-center gap-3 md:w-40">
+                  <time className="text-sm text-muted-foreground md:text-base">
+                    {dateFmt.format(new Date(p.date))}
+                  </time>
+                  <ViewCounter path={`/blog/${p.slug}`} />
+                </div>
+                <Link
+                  href={`/blog/${p.slug}`}
+                  className={cn(
+                    "group text-base no-underline transition-colors md:text-lg",
+                    "hover:text-blue-600 dark:text-white dark:hover:text-blue-400",
+                  )}
+                >
+                  {head}
+                  <span className="whitespace-nowrap">
+                    {tail}
+                    <ArrowRight
+                      className={cn(
+                        "ml-1.5 inline-block size-[1em] align-middle",
+                        /* Hidden and tucked left at rest, then slides into place
+                           on hover/keyboard focus and nudges further on press. */
+                        "opacity-0 transition-[opacity,transform] duration-200 ease-out",
+                        "group-hover:opacity-100 group-focus-visible:opacity-100",
+                        "motion-safe:-translate-x-2 motion-safe:group-hover:translate-x-0",
+                        "motion-safe:group-focus-visible:translate-x-0",
+                        "motion-safe:group-active:translate-x-1",
+                      )}
+                    />
+                  </span>
+                </Link>
+              </section>
+            </motion.li>
+          );
+        })}
       </motion.ul>
     </section>
   );
