@@ -12,11 +12,12 @@ import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ViewCounter from "@/components/view-counter";
 
-/** Cached formatter for "Mon DD, YYYY" style dates. */
+/** Cached formatter for "Mon DD, YYYY" style dates (UTC, same as the homepage list). */
 const dateFmt = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "2-digit",
   year: "numeric",
+  timeZone: "UTC",
 });
 
 /** Staggered reveal for the list container. */
