@@ -108,10 +108,19 @@ function buildMetadata(data, urlPath) {
     meta.keywords = tags;
   }
 
-  // Cover image (projects)
-  if (data.cover) {
-    meta.openGraph.images = [{ url: data.cover, alt: title }];
-  }
+  // Cover image, falling back to the portrait. A page-level `openGraph` replaces
+  // the root layout's object entirely, so without a fallback posts would ship
+  // with no og:image at all and social cards would render without a preview.
+  meta.openGraph.images = data.cover
+    ? [{ url: data.cover, alt: title }]
+    : [
+        {
+          url: author.image.src,
+          alt: author.image.alt,
+          width: author.image.width,
+          height: author.image.height,
+        },
+      ];
 
   return meta;
 }

@@ -53,6 +53,9 @@ function blogPosting(data, url) {
   if (data.date) {
     ld.datePublished = new Date(data.date).toISOString().slice(0, 10);
   }
+  // Google's Article rich results require `image`; fall back to the portrait.
+  const cover = data.cover || author.image.src;
+  ld.image = cover.startsWith("http") ? cover : `${BASE_URL}${cover}`;
   const tags = Array.isArray(data.tags) ? data.tags : [];
   if (tags.length) ld.keywords = tags;
   return ld;
