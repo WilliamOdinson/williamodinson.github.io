@@ -9,6 +9,10 @@ Repository: https://github.com/WilliamOdinson/williamodinson.github.io
 License:    MIT
 Launched:   2025-07-02
 
+/* SERVICES */
+Analytics:  GoatCounter — https://williamodinson.goatcounter.com
+            Settings: https://williamodinson.goatcounter.com/settings/main
+
 /* THANKS */
 Based on:   eric-portfolio-website by Eric Huang (https://github.com/erich2s/eric-portfolio-website)
 Icons:      Font Awesome 6, Lucide React
