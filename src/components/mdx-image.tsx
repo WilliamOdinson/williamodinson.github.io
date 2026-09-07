@@ -20,7 +20,7 @@ export default function MdxImage(props: React.ImgHTMLAttributes<HTMLImageElement
         onClick={() => setOpen(true)}
       />
       <Lightbox
-        src={props.src || ""}
+        src={typeof props.src === "string" ? props.src : ""}
         alt={props.alt}
         open={open}
         onClose={() => setOpen(false)}

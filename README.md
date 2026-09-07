@@ -6,7 +6,7 @@ Built with Next.js 15 (static export), React 18, TypeScript, Tailwind CSS 3.4, s
 
 ## Quickstart
 
-Prerequisites: **Node.js >= 18 LTS** and **pnpm >= 10**.
+Prerequisites: **Node.js >= 20.9** and **pnpm 12**.
 
 ```bash
 git clone git@github.com:WilliamOdinson/williamodinson.github.io.git

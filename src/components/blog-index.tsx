@@ -6,7 +6,7 @@
 
 import { useState, useMemo } from "react";
 import { PostMeta } from "@/lib/get-posts";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -21,13 +21,13 @@ const dateFmt = new Intl.DateTimeFormat("en-US", {
 });
 
 /** Staggered reveal for the list container. */
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
 };
 
 /** Slide-up animation for each list item. */
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 16, opacity: 0 },
   visible: {
     y: 0,
