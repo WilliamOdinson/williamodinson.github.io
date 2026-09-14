@@ -1,0 +1,17 @@
+---
+title: "GEMM Steps 1 to 9, Cycle by Cycle"
+summary: "Interactive traces to read alongside the GEMM chapters of Modern GPU Programming for MLSys. Pick a step, press play, and watch which warp does what, which barrier fires, and what sits in SMEM and TMEM."
+date: 2026-09-12
+tags: ["CUDA", "GEMM", "TMA", "TMEM", "mbarrier", "Warp Specialization", "Blackwell"]
+featured: false
+---
+
+import StepSwitcher from "@/components/pipeline-trace/step-switcher";
+
+# GEMM Steps 1 to 9, Cycle by Cycle
+
+A companion to Part III of [Modern GPU Programming for MLSys](https://mlc.ai/modern-gpu-programming-for-mlsys/) (MLC Community), which builds a Blackwell GEMM from a single sequential tile up to a kernel that matches cuBLAS in nine steps. The book has the code and the reasoning; this page has the timeline. Pick a step below, read the book's section (each step links to it), then press play.
+
+How to read a trace: one column is one logical cycle, not a clock cycle; lanes are warp roles or hardware units; hatched blocks are a role parked on a barrier; the chips underneath show which barriers fire in that cycle, and the panels show what each SMEM stage and TMEM accumulator holds. The Left and Right keys step, Space plays, and `#step-N` in the URL opens a given step.
+
+<StepSwitcher />
