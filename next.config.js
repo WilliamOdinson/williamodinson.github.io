@@ -5,6 +5,7 @@
  * - Uses static export (`output: 'export'`) for GitHub Pages deployment.
  * - Disables image optimization (not available in static export mode).
  */
+const os = require('os')
 const path = require('path')
 
 const withMDX = require('@next/mdx')({
@@ -20,11 +21,14 @@ const withMDX = require('@next/mdx')({
   },
 })
 
+const lanIPs = Object.values(os.networkInterfaces())
+  .flat()
+  .filter(n => n.family === 'IPv4' && !n.internal)
+  .map(n => n.address)
+
 module.exports = withMDX({
   output: 'export',
   images: { unoptimized: true },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
-
-  // Allow dev requests from your LAN IP as well as localhost
-  allowedDevOrigins: ['10.0.0.154', 'localhost'],
+  allowedDevOrigins: [...lanIPs, 'localhost'],
 })
