@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "typecheck": "tsc -p functions",
     "clean": "rm -rf .next out",
     "clean:all": "rm -rf .next out node_modules && pnpm install"
   },
@@ -42,6 +43,7 @@
     "unified": "~11.0.5"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260919.1",
     "@eslint/js": "^10.0.1",
     "@next/eslint-plugin-next": "16.3.4",
     "@tailwindcss/typography": "~0.5.20",
@@ -62,5 +64,5 @@
     "typescript": "6.0.3",
     "typescript-eslint": "^8.69.0"
   },
-  "packageManager": "pnpm@12.3.4"
+  "packageManager": "pnpm@12.5.1"
 }

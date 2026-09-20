@@ -42,6 +42,8 @@ export const rss = {
  * 2. Create a site and get your site code (e.g. "williamodinson")
  * 3. Replace the empty string below with your site code
  * 4. Enable "Allow public access to count API" in GoatCounter Settings → Sites
+ * 5. /resume.pdf is counted server-side by functions/resume.pdf.ts, which needs
+ *    the GOATCOUNTER_TOKEN secret on the Cloudflare Pages project
  */
 export const goatcounter = {
   siteCode: "williamodinson",
