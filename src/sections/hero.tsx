@@ -6,7 +6,7 @@
 "use client";
 
 
-import { author } from "@/lib/site.config.mjs";
+import { author, resume } from "@/lib/site.config.mjs";
 
 import ContactList from "@/components/contact-list";
 import MotionText from "@/components/motion-text";
@@ -77,19 +77,21 @@ export default function Hero() {
         <ContactList delayOffset={0.5} showWhenInView={false} />
       </div>
 
-      {/* Résumé download button */}
-      <MotionDiv delayOffset={1.4}>
-        <Button asChild>
-          <a
-            href={RESUME_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Eye className="mr-2 h-4 w-4" />
-            View My Résumé
-          </a>
-        </Button>
-      </MotionDiv>
+      {/* Résumé download button, omitted while the résumé is hidden in site.config */}
+      {!resume.hidden && (
+        <MotionDiv delayOffset={1.4}>
+          <Button asChild>
+            <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              View My Résumé
+            </a>
+          </Button>
+        </MotionDiv>
+      )}
     </section>
   );
 }

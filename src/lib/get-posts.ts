@@ -20,6 +20,11 @@ export interface PostMeta {
 /**
  * Scan `src/app/blog/` for MDX posts and return their metadata.
  *
+ * Posts with `hidden: true` in their front-matter are left out, so they never
+ * reach the blog index, the homepage, or the RSS feed (the sitemap applies the
+ * same rule in `app/sitemap.xml/route.ts`). Their pages are still built and
+ * reachable by URL, marked noindex by `remark-next-metadata`.
+ *
  * @param filter - Optional filter; pass `{ featured: true }` to get homepage posts only.
  * @returns Posts sorted by date descending (newest first).
  */
@@ -29,16 +34,21 @@ export async function getAllPosts(
   const base = path.join(process.cwd(), "src/app/blog");
   const entries = await fs.readdir(base, { withFileTypes: true });
 
-  const posts = await Promise.all(
+  const scanned = await Promise.all(
     entries
-      // Skip non-directory entries and Next.js dynamic route folders like [slug]
-      .filter((e) => e.isDirectory() && !e.name.startsWith("["))
+      // Skip non-directory entries, Next.js dynamic route folders like [slug]
+      // and private folders like _draft, which Next.js never routes to
+      .filter(
+        (e) =>
+          e.isDirectory() && !e.name.startsWith("[") && !e.name.startsWith("_"),
+      )
       .map(async (dir) => {
         const raw = await fs.readFile(
           path.join(base, dir.name, "page.mdx"),
           "utf8",
         );
         const { data } = matter(raw);
+        if (data.hidden) return null;
 
         return {
           slug: dir.name,
@@ -49,6 +59,7 @@ export async function getAllPosts(
         } satisfies PostMeta;
       }),
   );
+  const posts = scanned.filter((p): p is PostMeta => p !== null);
 
   const filtered =
     filter?.featured !== undefined

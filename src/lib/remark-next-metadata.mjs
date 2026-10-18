@@ -12,6 +12,7 @@
  *  - title, description, keywords
  *  - openGraph  (title, description, type, siteName, publishedTime, tags, images, url)
  *  - alternates (canonical)
+ *  - robots     (noindex, nofollow) when the front-matter has `hidden: true`
  */
 import matter from "gray-matter";
 import { author, site } from "./site.config.mjs";
@@ -99,6 +100,11 @@ function buildMetadata(data, urlPath) {
 
   if (data.date) {
     meta.openGraph.publishedTime = new Date(data.date).toISOString();
+  }
+
+  // Hidden pages are unlisted everywhere else; keep them out of search results too.
+  if (data.hidden) {
+    meta.robots = { index: false, follow: false };
   }
 
   // Tags → OG tags + keywords meta

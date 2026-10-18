@@ -37,6 +37,22 @@ export const rss = {
 };
 
 /**
+ * Résumé visibility. Set `hidden: true` to take /resume.pdf offline:
+ *  - the homepage stops rendering the "View My Résumé" button
+ *  - the deploy workflow stops injecting the PDF into out/
+ *  - functions/resume.pdf.ts answers 404 even if a stale deployment has the file
+ *
+ * Blog posts have the same switch in their front-matter: `hidden: true` keeps
+ * a post out of the blog index, the homepage, the sitemap and the RSS feed and
+ * marks the page noindex. The page itself stays reachable by its URL; to
+ * remove the route entirely, prefix the post folder with `_` (a Next.js
+ * private folder), which the listing code skips as well.
+ */
+export const resume = {
+  hidden: false,
+};
+
+/**
  * GoatCounter: free, privacy-friendly web analytics.
  * 1. Sign up at https://www.goatcounter.com (free for personal use)
  * 2. Create a site and get your site code (e.g. "williamodinson")

@@ -44,8 +44,15 @@ jobs:
       - name: Build website
         run: pnpm run build
 
-      # 5. inject resume PDF from latest release
+      # 5. inject resume PDF from latest release, unless site.config.mjs hides it
+      - name: Read résumé visibility
+        id: resume
+        run: |
+          hidden=$(node --input-type=module --eval 'import { resume } from "./src/lib/site.config.mjs"; console.log(resume.hidden === true);')
+          echo "hidden=$hidden" >> "$GITHUB_OUTPUT"
+
       - name: Download resume from latest release
+        if: steps.resume.outputs.hidden != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release download resume --pattern "resume.pdf" --dir out/ --clobber

@@ -9,12 +9,16 @@
  * public/_routes.json limits Function invocation to this one path; every
  * other request keeps being served as a plain static asset.
  *
+ * While `resume.hidden` is set in site.config.mjs the path answers 404 with
+ * the site's own 404 page. The deploy workflow also stops injecting the PDF,
+ * so this guards against a stale deployment that still carries the file.
+ *
  * Environment (Cloudflare Pages secret, or .dev.vars for `wrangler pages dev`):
  *   GOATCOUNTER_TOKEN   API token with the "Record pageviews" permission.
  *   GOATCOUNTER_ORIGIN  Optional API origin override, e.g. a local mock server.
  *                       Defaults to https://<siteCode>.goatcounter.com.
  */
-import { goatcounter } from "../src/lib/site.config.mjs";
+import { goatcounter, resume } from "../src/lib/site.config.mjs";
 
 interface Env {
   GOATCOUNTER_TOKEN?: string;
@@ -30,6 +34,8 @@ export const onRequestGet: PagesFunction<Env> = async ({
   next,
   waitUntil,
 }) => {
+  if (resume.hidden) return notFound(next);
+
   /* Static asset server, with _headers/_redirects rules applied as usual */
   const response = await next();
 
@@ -43,6 +49,17 @@ export const onRequestGet: PagesFunction<Env> = async ({
 
   return response;
 };
+
+/**
+ * The exported 404 page (out/404.html) with the status to match. Asking the
+ * asset server for it directly returns 200, so the status is rewritten here.
+ */
+async function notFound(
+  next: EventContext<Env, string, Record<string, unknown>>["next"],
+): Promise<Response> {
+  const page = await next("/404.html");
+  return new Response(page.body, { status: 404, headers: page.headers });
+}
 
 /**
  * One person opening the PDF can produce several requests. Count only the one

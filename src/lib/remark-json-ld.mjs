@@ -97,6 +97,9 @@ export default function remarkJsonLd() {
     const { data } = matter(`---\n${yamlNode.value}\n---`);
     if (!data || typeof data !== "object") return;
 
+    /* Hidden pages are noindex; structured data would only invite rich results. */
+    if (data.hidden) return;
+
     const { urlPath, section } = resolveFile(vfile);
     if (!section) return;
 

@@ -20,6 +20,8 @@ type UrlEntry = {
 
 /**
  * Scan a directory for MDX page folders and return sitemap entries.
+ * Pages with `hidden: true` in their front-matter are left out, matching
+ * `getAllPosts()`; they also carry a noindex robots tag.
  *
  * @param dir    - Absolute path to the parent directory (e.g. `src/app/blog`).
  * @param prefix - URL prefix (e.g. `/blog`).
@@ -27,15 +29,20 @@ type UrlEntry = {
 async function collect(dir: string, prefix: string): Promise<UrlEntry[]> {
   const entries = await fs.readdir(dir, { withFileTypes: true });
 
-  return Promise.all(
+  const scanned = await Promise.all(
     entries
-      .filter((e) => e.isDirectory() && !e.name.startsWith("["))
+      // Skip dynamic route folders like [slug] and private folders like _draft
+      .filter(
+        (e) =>
+          e.isDirectory() && !e.name.startsWith("[") && !e.name.startsWith("_"),
+      )
       .map(async (folder) => {
         const mdxPath = path.join(dir, folder.name, "page.mdx");
         const raw = await fs.readFile(mdxPath, "utf8");
 
         // Use front-matter date or file mtime as lastmod
         const { data } = matter(raw);
+        if (data.hidden) return null;
         const stat = await fs.stat(mdxPath);
         const dateStr = new Date(data.date ?? data.lastModified ?? stat.mtime)
           .toISOString()
@@ -47,6 +54,8 @@ async function collect(dir: string, prefix: string): Promise<UrlEntry[]> {
         };
       }),
   );
+
+  return scanned.filter((entry): entry is UrlEntry => entry !== null);
 }
 
 export async function GET() {
