@@ -21,6 +21,15 @@ export default [
         },
     },
     {
+        files: ["scripts/**/*.mjs"],
+        languageOptions: {
+            globals: {
+                process: "readonly",
+                console: "readonly",
+            },
+        },
+    },
+    {
         ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"],
     },
 ];

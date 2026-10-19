@@ -1,12 +1,15 @@
 /**
  * Sitemap Route: Generates `/sitemap.xml` at build time.
  *
- * Collects static top-level pages (/, /blog) and dynamic blog posts
- * (from `src/app/blog/<slug>/page.mdx`).
+ * Collects static top-level pages (/, /blog, /sale), blog posts
+ * (from `src/app/blog/<slug>/page.mdx`) and second-hand listings
+ * (from `src/app/sale/<slug>/page.mdx`, unless the section is hidden).
  */
 import { promises as fs } from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { getAllSaleItems } from "@/lib/get-sale-items";
+import { sale } from "@/lib/site.config.mjs";
 
 export const dynamic = "force-static";
 
@@ -62,14 +65,24 @@ export async function GET() {
   // Collect dynamic content pages
   const blog = await collect(path.join(process.cwd(), "src/app/blog"), "/blog");
 
+  // Listings go through getAllSaleItems() so hidden items and the section
+  // switch are honoured and a broken listing fails the build here as well.
+  const listings: UrlEntry[] = sale.hidden
+    ? []
+    : (await getAllSaleItems()).map((item) => ({
+        loc: `${BASE}/sale/${item.slug}`,
+        lastmod: item.date,
+      }));
+
   // Static top-level pages (use today's date as lastmod)
   const today = new Date().toISOString().slice(0, 10);
   const topLevel: UrlEntry[] = [
     { loc: BASE, lastmod: today },
     { loc: `${BASE}/blog`, lastmod: today },
+    ...(sale.hidden ? [] : [{ loc: `${BASE}/sale`, lastmod: today }]),
   ];
 
-  const urls = [...topLevel, ...blog]
+  const urls = [...topLevel, ...blog, ...listings]
     .map(
       ({ loc, lastmod }) => `
   <url>

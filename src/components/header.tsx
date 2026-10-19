@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme-toggle";
+import { sale } from "@/lib/site.config.mjs";
 
 /** Custom calligraphic font used for the site logo only. */
 const goldenSignature = localFont({
@@ -17,9 +18,10 @@ const goldenSignature = localFont({
   display: "swap",
 });
 
-/** Top-level navigation entries. */
+/** Top-level navigation entries; the listings link goes away with `sale.hidden`. */
 const nav = [
   { label: "Blogs", href: "/blog" },
+  ...(sale.hidden ? [] : [{ label: sale.title, href: "/sale" }]),
 ];
 
 export default function Header() {

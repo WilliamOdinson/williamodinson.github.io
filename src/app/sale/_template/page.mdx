@@ -1,0 +1,37 @@
+---
+# Template for a listing. Copy this folder to src/app/sale/<slug>/ (the folder
+# name becomes the URL, /sale/<slug>) and put the photos in public/sale/<slug>/,
+# e.g. with `pnpm sale:photos <slug> ~/Downloads/IMG_*.jpg`. Lines starting
+# with # are comments; delete the optional keys you do not need.
+
+title: "IKEA MALM desk, 120 x 60 cm"          # required
+price: 40                                      # required; 0 means free
+originalPrice: 199                             # optional; what it cost new, shown struck through
+negotiable: true                               # optional; adds "OBO" next to the price
+condition: like-new                            # required: new | like-new | good | fair | for-parts
+status: available                              # optional: available (default) | pending | sold
+category: Furniture                            # optional; filter chips are built from these
+date: 2026-10-18                               # required; the day you listed it, YYYY-MM-DD
+summary: "Bought Aug 2025, no marks, comes disassembled with all screws."   # optional one-liner
+images:                                        # optional; the first one is the cover
+  - /sale/malm-desk/01.webp
+  - /sale/malm-desk/02.webp
+specs:                                         # optional; shown as a table in this order
+  Size: 120 x 60 x 73 cm
+  Color: White
+  Purchased: Aug 2025
+link: https://example.com/the-product-page   # optional; manufacturer or store page for reference
+pickup: Squirrel Hill, Pittsburgh              # optional; overrides sale.location in site.config
+hidden: false                                  # optional; true keeps it out of every listing
+---
+
+{/*
+  Optional description. Plain Markdown; images here open in the lightbox too.
+  Delete everything below the front-matter if the fields above say it all.
+*/}
+
+Used for a year as a home-office desk. The top has no scratches and the
+cable tray under the back edge is intact. It is already taken apart for the
+move, so it fits in any car.
+
+Not included: the lamp and the monitor arm in the photos.

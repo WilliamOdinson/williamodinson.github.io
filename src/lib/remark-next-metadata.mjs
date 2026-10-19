@@ -13,50 +13,17 @@
  *  - openGraph  (title, description, type, siteName, publishedTime, tags, images, url)
  *  - alternates (canonical)
  *  - robots     (noindex, nofollow) when the front-matter has `hidden: true`
+ *
+ * Pages under /sale/ are second-hand listings: their front-matter goes through
+ * `normalizeSaleItem` (so the build fails on a bad listing) and the description
+ * and cover come from the item when the front-matter has none of its own.
  */
 import matter from "gray-matter";
 import { author, site } from "./site.config.mjs";
+import { describeSaleItem, normalizeSaleItem } from "./sale.mjs";
+import { valueToEstree } from "./mdx-estree.mjs";
 
 const BASE_URL = site.url;
-
-/* ------------------------------------------------------------------ */
-/*  Minimal valueToEstree (avoids adding estree-util-value-to-estree) */
-/* ------------------------------------------------------------------ */
-
-function valueToEstree(v) {
-  if (v === null || v === undefined) {
-    return { type: "Literal", value: null, raw: "null" };
-  }
-  if (typeof v === "string") {
-    return { type: "Literal", value: v, raw: JSON.stringify(v) };
-  }
-  if (typeof v === "number") {
-    return { type: "Literal", value: v, raw: String(v) };
-  }
-  if (typeof v === "boolean") {
-    return { type: "Literal", value: v, raw: String(v) };
-  }
-  if (Array.isArray(v)) {
-    return { type: "ArrayExpression", elements: v.map(valueToEstree) };
-  }
-  if (typeof v === "object") {
-    return {
-      type: "ObjectExpression",
-      properties: Object.entries(v)
-        .filter(([, val]) => val !== undefined)
-        .map(([key, val]) => ({
-          type: "Property",
-          method: false,
-          shorthand: false,
-          computed: false,
-          key: { type: "Identifier", name: key },
-          value: valueToEstree(val),
-          kind: "init",
-        })),
-    };
-  }
-  return { type: "Literal", value: String(v), raw: JSON.stringify(String(v)) };
-}
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                           */
@@ -69,15 +36,62 @@ function valueToEstree(v) {
 function urlPathFromFile(vfile) {
   const filePath = vfile.path || vfile.history?.[0] || "";
   const match = filePath.match(
-    /src[\\/]app[\\/]((?:blog|projects)[\\/][^\\/]+)[\\/]/,
+    /src[\\/]app[\\/]((?:blog|projects|sale)[\\/][^\\/]+)[\\/]/,
   );
   return match ? `/${match[1].replace(/\\/g, "/")}` : "";
+}
+
+/** The portrait, used as og:image wherever a page has no cover of its own. */
+function portraitImage() {
+  return {
+    url: author.image.src,
+    alt: author.image.alt,
+    width: author.image.width,
+    height: author.image.height,
+  };
+}
+
+/**
+ * Metadata for a second-hand listing under /sale/. Link previews in chat apps
+ * show title, description and image, so the description carries the condition
+ * and price when the front-matter has no `summary`.
+ */
+function saleMetadata(data, urlPath) {
+  const item = normalizeSaleItem(data, urlPath.slice("/sale/".length));
+  const title = item.title;
+  const description = item.summary || describeSaleItem(item);
+  const fullUrl = `${BASE_URL}${urlPath}`;
+  const cover = item.images[0];
+
+  const meta = {
+    title,
+    description,
+    alternates: { canonical: fullUrl },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      siteName: author.name,
+      url: fullUrl,
+      images: cover ? [{ url: cover, alt: title }] : [portraitImage()],
+    },
+  };
+
+  // A hidden item stays out of search. The section-wide switch (`sale.hidden`)
+  // is applied by src/app/sale/layout.tsx, where the build tracks the config.
+  if (item.hidden) {
+    meta.robots = { index: false, follow: false };
+  }
+
+  return meta;
 }
 
 /**
  * Build a Next.js Metadata object from raw front-matter data.
  */
 function buildMetadata(data, urlPath) {
+  if (urlPath.startsWith("/sale/")) return saleMetadata(data, urlPath);
+
   // Normalise fields across blog posts (title/summary) and projects (repo/description).
   const title = data.title || data.repo || "";
   const description = data.summary || data.description || "";
@@ -119,14 +133,7 @@ function buildMetadata(data, urlPath) {
   // with no og:image at all and social cards would render without a preview.
   meta.openGraph.images = data.cover
     ? [{ url: data.cover, alt: title }]
-    : [
-        {
-          url: author.image.src,
-          alt: author.image.alt,
-          width: author.image.width,
-          height: author.image.height,
-        },
-      ];
+    : [portraitImage()];
 
   return meta;
 }

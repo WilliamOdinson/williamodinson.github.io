@@ -53,6 +53,35 @@ export const resume = {
 };
 
 /**
+ * Second-hand listings at /sale. One folder per item under src/app/sale/
+ * (copy src/app/sale/_template/page.mdx), photos under public/sale/<slug>/.
+ *
+ * `hidden: true` takes the section offline without deleting anything: the nav
+ * link and the sitemap entries go away, /sale shows an empty notice, and every
+ * item page is marked noindex. Pages stay reachable by URL, like hidden posts.
+ *
+ * Buyers reach you through `contact.email`; the mail opens pre-addressed with
+ * the item's title and link in the subject and body.
+ */
+export const sale = {
+  hidden: false,
+  title: "For Sale",
+  description:
+    "Things I no longer need, priced to go. Everything is pickup only in Pittsburgh.",
+  location: "Pittsburgh, PA",
+  currency: "USD",
+  contact: {
+    email: author.email,
+  },
+  /** Short lines shown under the heading on /sale and next to the contact button. */
+  terms: [
+    "Pickup only, Pittsburgh, PA. No shipping.",
+    "Cash, Venmo or Zelle at pickup.",
+    "First to confirm a pickup time gets the item.",
+  ],
+};
+
+/**
  * GoatCounter: free, privacy-friendly web analytics.
  * 1. Sign up at https://www.goatcounter.com (free for personal use)
  * 2. Create a site and get your site code (e.g. "williamodinson")
