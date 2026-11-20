@@ -2,9 +2,8 @@
  * RootLayout: Top-level layout wrapping every page.
  *
  * Responsibilities:
- *  - Loads the Montserrat font globally.
- *  - Injects a `<script>` to detect the user's theme before first paint
- *    (prevents dark-mode flash on reload).
+ *  - Loads Montserrat for body text and JetBrains Mono as `--font-mono`.
+ *  - Sets the `.dark` class on `<html>` before first paint (see `themeInit`).
  *  - Renders the shared Header, Footer, GridBackground, and BackToTop.
  *  - Provides the ThemeProvider context to all children.
  */
@@ -16,7 +15,6 @@ import Header from "@/components/header";
 import BackToTop from "@/components/back-to-top";
 import GridBackground from "@/components/grid-background";
 import { ThemeProvider } from "@/components/theme-provider";
-import Script from "next/script";
 import Footer from "@/components/footer";
 import GoatCounterScript from "@/components/goatcounter-script";
 import { author, site } from "@/lib/site.config.mjs";
@@ -26,6 +24,18 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 });
+
+/**
+ * Applies the saved theme, or the OS preference, while the parser is still in
+ * `<head>`, so dark mode never paints a light frame first. It has to be a plain
+ * inline script: next/script runs `beforeInteractive` code only after the
+ * Next.js runtime has loaded.
+ */
+const themeInit = `{
+  const stored = localStorage.getItem("theme");
+  const dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  if (dark) document.documentElement.classList.add("dark");
+}`;
 
 export const metadata: Metadata = {
   title: site.title,
@@ -60,19 +70,7 @@ export default function RootLayout({
        theme-preload script toggling .dark before React mounts */
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Detect stored/system theme before first paint to avoid flash */}
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`
-            (function () {
-              try {
-                const stored = localStorage.getItem('theme');
-                const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                const theme = stored || system;
-                if (theme === 'dark') document.documentElement.classList.add('dark');
-              } catch (_) {}
-            })();
-          `}
-        </Script>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
 
         {/* Resource discovery links */}
         <link rel="alternate" type="application/rss+xml" href="/feed.xml" />

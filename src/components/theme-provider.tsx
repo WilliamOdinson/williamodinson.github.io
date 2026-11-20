@@ -1,12 +1,11 @@
 /**
- * ThemeProvider: React context that manages and persists the light/dark theme.
+ * ThemeProvider: React context that holds the light/dark theme.
  *
- * Initialization priority:
- *  1. `localStorage("theme")`: user's explicit choice.
- *  2. `prefers-color-scheme` media query: OS-level preference.
- *  3. Fallback to "light".
- *
- * The provider toggles the `.dark` class on `<html>` so Tailwind's dark mode works.
+ * The inline script in `app/layout.tsx` sets the `.dark` class on `<html>`
+ * before first paint, from `localStorage("theme")` or the OS preference. The
+ * provider adopts that class on mount; `toggle` flips the class and saves the
+ * choice. Styling should use Tailwind's `dark:` variant where it can, since
+ * `theme` is "light" until the provider has mounted.
  */
 "use client";
 
@@ -15,47 +14,30 @@ import {
   useContext,
   useEffect,
   useState,
-  ReactNode,
+  type ReactNode,
 } from "react";
 
 type Theme = "light" | "dark";
-type ThemeCtx = { theme: Theme; toggle: () => void };
 
-const ThemeContext = createContext<ThemeCtx | undefined>(undefined);
+const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({
+  theme: "light",
+  toggle: () => {},
+});
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light"); // SSR-safe default
+  // Matches the prerendered HTML, which cannot know the visitor's theme.
+  const [theme, setTheme] = useState<Theme>("light");
 
-  /* Read the persisted or system theme once on mount. */
   useEffect(() => {
-    let initial: Theme = "light";
-
-    const stored = localStorage.getItem("theme") as Theme | null;
-    if (stored === "light" || stored === "dark") {
-      initial = stored;
-    } else {
-      try {
-        initial = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
-      } catch {
-        /* Keep "light" on failure */
-      }
-    }
-
-    setTheme(initial);
-    document.documentElement.classList.toggle("dark", initial === "dark");
+    if (document.documentElement.classList.contains("dark")) setTheme("dark");
   }, []);
 
-  /** Toggle between light and dark, persisting the choice to localStorage. */
-  const toggle = () => {
-    setTheme((prev) => {
-      const next: Theme = prev === "dark" ? "light" : "dark";
-      localStorage.setItem("theme", next);
-      document.documentElement.classList.toggle("dark", next === "dark");
-      return next;
-    });
-  };
+  function toggle() {
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem("theme", next);
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggle }}>
@@ -64,11 +46,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
-/** Hook to access the current theme and toggle function. */
-export const useTheme = () => {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) {
-    throw new Error("useTheme must be used inside ThemeProvider");
-  }
-  return ctx;
-};
+export const useTheme = () => useContext(ThemeContext);
