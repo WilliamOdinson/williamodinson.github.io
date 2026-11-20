@@ -1,5 +1,9 @@
 allowBuilds:
   sharp: true
+  # Not in the lockfile: cloudflare/wrangler-action runs `pnpm add wrangler`
+  # in this project at deploy time, and wrangler depends on both.
+  esbuild: true
+  workerd: true
 overrides:
   mdast-util-to-hast: ">=13.2.1"
   lodash-es: ">=4.18.1"
