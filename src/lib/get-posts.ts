@@ -8,7 +8,7 @@ import path from "path";
 import { promises as fs } from "fs";
 import matter from "gray-matter";
 
-export const BLOG_DIR = path.join(process.cwd(), "src/app/blog");
+const BLOG_DIR = path.join(process.cwd(), "src/app/blog");
 
 /** Shape of front-matter metadata extracted from a blog MDX file. */
 export interface PostMeta {
@@ -25,7 +25,7 @@ export interface PostMeta {
  * Scan `src/app/blog/` for MDX posts and return their metadata, newest first.
  *
  * Posts with `hidden: true` in their front-matter are left out, so they never
- * reach the blog index, the homepage, the RSS feed or the sitemap. Their pages
+ * reach the blog index, the homepage or the sitemap. Their pages
  * are still built and reachable by URL, marked noindex by
  * `remark-next-metadata`. Folders starting with `_` are Next.js private
  * folders: they have no route and are skipped as well.

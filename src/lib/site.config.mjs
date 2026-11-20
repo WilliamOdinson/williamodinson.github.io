@@ -32,11 +32,6 @@ export const site = {
   language: "en",
 };
 
-export const rss = {
-  title: "Blog by William Sun",
-  description: "Articles on Software Engineering, AI, etc.",
-};
-
 /**
  * Résumé visibility. Set `hidden: true` to take /resume.pdf offline:
  *  - the homepage stops rendering the "View My Résumé" button
@@ -44,8 +39,8 @@ export const rss = {
  *    answers with the site's 404 page
  *
  * Blog posts have the same switch in their front-matter: `hidden: true` keeps
- * a post out of the blog index, the homepage, the sitemap and the RSS feed and
- * marks the page noindex. The page itself stays reachable by its URL; to
+ * a post out of the blog index, the homepage and the sitemap and marks the
+ * page noindex. The page itself stays reachable by its URL; to
  * remove the route entirely, prefix the post folder with `_` (a Next.js
  * private folder), which the listing code skips as well.
  */

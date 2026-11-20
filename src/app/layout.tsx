@@ -69,12 +69,11 @@ export default function RootLayout({
   return (
     /* suppressHydrationWarning: prevents mismatch caused by the
        theme-preload script toggling .dark before React mounts */
-    <html lang="en" suppressHydrationWarning>
+    <html lang={site.language} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
 
         {/* Resource discovery links */}
-        <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
         <link rel="author" type="text/plain" href="/humans.txt" />
 
         {/* JSON-LD: Person + WebSite structured data for rich search results */}

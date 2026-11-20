@@ -2,7 +2,7 @@
 
 Personal website and blog, live at **[wsun.io](https://wsun.io)**.
 
-Next.js (App Router, static export), React, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, and MDX. Posts are MDX files; front matter drives page metadata, Open Graph, JSON-LD, the RSS feed, and the sitemap through two small remark plugins. Comments via Giscus, page views via GoatCounter. Deployed to Cloudflare Pages by GitHub Actions.
+Next.js (App Router, static export), React, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, and MDX. Posts are MDX files; their front matter drives page metadata, Open Graph and JSON-LD through two small remark plugins, and the sitemap. Comments via Giscus, page views via GoatCounter. Deployed to Cloudflare Pages by GitHub Actions.
 
 ## Quickstart
 

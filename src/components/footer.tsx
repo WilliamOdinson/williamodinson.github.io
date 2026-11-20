@@ -1,9 +1,9 @@
 /**
- * Footer: Site-wide footer with RSS, robots.txt, humans.txt links
+ * Footer: Site-wide footer with robots.txt and humans.txt links
  * and the copyright year, fixed at build time.
  */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRss, faRobot, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faRobot, faUser } from "@fortawesome/free-solid-svg-icons";
 import { author } from "@/lib/site.config.mjs";
 
 export default function Footer() {
@@ -11,13 +11,6 @@ export default function Footer() {
     <footer aria-label="Site footer" className="mt-24 flex flex-col items-center gap-4 py-8 text-sm text-muted-foreground">
       {/* Static resource links */}
       <p className="flex gap-6">
-        <a
-          href="/feed.xml"
-          className="flex items-center gap-1 hover:underline"
-        >
-          <FontAwesomeIcon icon={faRss} className="h-4 w-4" />
-          RSS
-        </a>
         <a
           href="/robots.txt"
           className="flex items-center gap-1 hover:underline"
