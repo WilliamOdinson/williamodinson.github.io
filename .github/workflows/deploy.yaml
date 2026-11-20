@@ -19,20 +19,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. grab the source
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      # 2. restore the Turbopack build cache that Next.js keeps in .next/cache
+      # Next.js keeps its Turbopack build cache in .next/cache.
       - name: Restore Next.js build cache
         uses: actions/cache@v6
         with:
           path: .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]sx', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]sx', '**/*.ts') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
-      # 3. pnpm, Node, the pnpm store cache and `pnpm install --frozen-lockfile`.
+      # Also restores the pnpm store cache and runs `pnpm install --frozen-lockfile`.
       - name: Set up pnpm and Node, install dependencies
         uses: pnpm/setup@v2
         with:
@@ -40,11 +39,10 @@ jobs:
           cache: true
           require-lockfile: true
 
-      # 4. compile and export the site
       - name: Build website
         run: pnpm run build
 
-      # 5. inject resume PDF from latest release, unless site.config.mjs hides it
+      # The résumé PDF comes from the `resume` release unless site.config.mjs hides it.
       - name: Read résumé visibility
         id: resume
         run: |
