@@ -1,6 +1,6 @@
 /**
  * MotionDiv: Generic scroll-triggered fade-and-slide-up wrapper.
- * Animates its children from y:100 to y:0 once visible in the viewport.
+ * Animates its children from y:20 to y:0 once visible in the viewport.
  *
  * @param delayOffset - Extra delay (seconds) before the animation starts.
  */

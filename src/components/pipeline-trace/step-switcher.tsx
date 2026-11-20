@@ -28,7 +28,6 @@ import TileScheduleMap from "./tile-schedule-map";
 
 const STEPS: StepNumber[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-/** The wrapper's height tweens between the old and new panel so nothing below jumps. */
 const heightTransition = { duration: 0.26, ease: "easeInOut" } as const;
 const pillTransition = { type: "spring", stiffness: 560, damping: 40 } as const;
 
@@ -65,7 +64,7 @@ export default function StepSwitcher() {
     return () => observer.disconnect();
   }, [heightMv, reduceMotion]);
 
-  // Pick up #step-N on load and on back/forward; runs only on the client.
+  // Pick up #step-N on load and on back/forward.
   useEffect(() => {
     const apply = () => {
       const s = stepFromHash(window.location.hash);

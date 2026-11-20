@@ -132,7 +132,7 @@
   }
 }
 
-/* ── Code-block copy button (moved from inline <style jsx>) ─────── */
+/* Code-block copy button (components/code-block.tsx) */
 .copy-btn {
   --bg: hsl(var(--secondary));
   --bg-hover: hsl(var(--secondary) / 0.85);

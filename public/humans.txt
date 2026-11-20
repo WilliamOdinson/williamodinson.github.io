@@ -15,7 +15,7 @@ Analytics:  GoatCounter — https://williamodinson.goatcounter.com
 
 /* THANKS */
 Based on:   eric-portfolio-website by Eric Huang (https://github.com/erich2s/eric-portfolio-website)
-Icons:      Font Awesome 6, Lucide React
+Icons:      Font Awesome 7, Lucide React
 Fonts:      Montserrat (Google Fonts), GoldenSignature (local)
 UI Lib:     Radix UI
 Special ▲:  Community contributors & open-source maintainers

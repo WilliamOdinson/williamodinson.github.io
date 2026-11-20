@@ -13,9 +13,8 @@ const description =
   "Articles on Software Engineering, AI, etc. Search by title or summary.";
 
 /*
- * `alternates` and `openGraph` are set explicitly: nested metadata objects
- * replace the root layout's rather than merging with it, so without these
- * `/blog` inherited the homepage canonical (`/`) and the homepage OG title.
+ * Nested metadata objects replace the root layout's instead of merging with
+ * it, so this page sets its own canonical URL and complete Open Graph object.
  */
 export const metadata: Metadata = {
   title,

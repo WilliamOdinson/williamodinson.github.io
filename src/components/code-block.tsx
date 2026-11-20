@@ -2,9 +2,9 @@
  * CodeBlock: Custom `<pre>` override for MDX code fences.
  *
  * Features:
- * - Syntax highlighting via react - syntax - highlighter(Prism).
- * - Theme - aware: switches between one - dark / one - light.
- * - Copy - to - clipboard button(styles in globals.css`.copy-btn`).
+ * - Syntax highlighting via react-syntax-highlighter (Prism).
+ * - Theme-aware: switches between one-dark and one-light.
+ * - Copy-to-clipboard button (styles in globals.css `.copy-btn`).
  */
 "use client";
 

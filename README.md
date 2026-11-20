@@ -21,7 +21,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | :--------------: | :----------------------------------------: |
 |    `pnpm dev`    |  Dev server with Turbopack and hot reload  |
 |   `pnpm build`   |   Type-check and static export to `out/`   |
-|   `pnpm lint`    | ESLint (strict TypeScript + Next.js rules) |
+|   `pnpm lint`    | ESLint (typescript-eslint + Next.js rules) |
 | `pnpm lint:fix`  |            Same, with auto-fix             |
 |   `pnpm clean`   |         Remove `.next/` and `out/`         |
 | `pnpm clean:all` | Also remove `node_modules/` and reinstall  |

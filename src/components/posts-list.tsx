@@ -6,9 +6,7 @@
  * and shared by all rows. Below `md`, the date stacks above the title.
  *
  * Rows reveal with a staggered spring animation when scrolled into view.
- * Hover uses the site's existing link vocabulary: the row takes the same
- * `bg-secondary` surface as the contact icons and ghost buttons, and the
- * title turns blue like the titles on the blog index.
+ * Hovering a row tints it `bg-secondary` and turns its title blue.
  */
 "use client";
 

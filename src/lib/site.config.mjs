@@ -1,8 +1,9 @@
 /**
- * site.config — Single source of truth for all site-wide settings.
+ * site.config: Single source of truth for all site-wide settings.
  *
- * Importable from both .tsx (via webpack) and .mjs (remark plugins via Node).
- * Edit this file to update your name, links, SEO metadata, etc. everywhere.
+ * Imported by the app, by the remark plugins (in Node, at build time) and by
+ * functions/resume.pdf.ts. Edit this file to change the name, links, SEO
+ * metadata, etc. everywhere.
  */
 
 export const author = {
@@ -53,13 +54,13 @@ export const resume = {
 };
 
 /**
- * GoatCounter: free, privacy-friendly web analytics.
- * 1. Sign up at https://www.goatcounter.com (free for personal use)
- * 2. Create a site and get your site code (e.g. "williamodinson")
- * 3. Replace the empty string below with your site code
- * 4. Enable "Allow public access to count API" in GoatCounter Settings → Sites
- * 5. /resume.pdf is counted server-side by functions/resume.pdf.ts, which needs
- *    the GOATCOUNTER_TOKEN secret on the Cloudflare Pages project
+ * GoatCounter (https://www.goatcounter.com) site code, i.e. the subdomain of
+ * https://<siteCode>.goatcounter.com. Used by:
+ *  - count.js, which counts pageviews (components/goatcounter-script.tsx)
+ *  - the view counters, which read the public count API; the site needs
+ *    "Allow public access to count API" enabled in its GoatCounter settings
+ *  - functions/resume.pdf.ts, which counts /resume.pdf through the backend
+ *    API with the GOATCOUNTER_TOKEN secret of the Cloudflare Pages project
  */
 export const goatcounter = {
   siteCode: "williamodinson",

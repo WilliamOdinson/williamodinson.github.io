@@ -3,8 +3,8 @@
 /**
  * Custom 404 page that also handles case-insensitive routing.
  *
- * On a static GitHub Pages site, visiting `/Blog` returns 404.
- * This page detects uppercase letters in the path and redirects
+ * Cloudflare Pages matches paths case-sensitively, so `/Blog` is served this
+ * page with a 404. It detects uppercase letters in the path and redirects
  * to the lowercase version. If the path is already lowercase
  * (a genuine 404), it shows the normal "Not Found" UI.
  */

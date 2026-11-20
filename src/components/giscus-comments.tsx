@@ -33,7 +33,7 @@ export default function GiscusComments() {
   useEffect(() => {
     if (!container.current) return;
 
-    // Avoid re-injecting if already present
+    // StrictMode runs this effect twice in development; inject only once.
     if (container.current.querySelector("script[data-giscus]")) return;
 
     const initialTheme = document.documentElement.classList.contains("dark")
