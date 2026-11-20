@@ -1,9 +1,7 @@
 /**
  * Footer: Site-wide footer with RSS, robots.txt, humans.txt links
- * and a dynamic copyright year.
+ * and the copyright year, fixed at build time.
  */
-"use client";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRss, faRobot, faUser } from "@fortawesome/free-solid-svg-icons";
 import { author } from "@/lib/site.config.mjs";

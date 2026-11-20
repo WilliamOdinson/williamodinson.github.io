@@ -230,14 +230,6 @@
 }
 
 @layer utilities {
-  .hover-lift {
-    @apply transition-transform duration-200 ease-linear;
-  }
-
-  .hover-lift:hover {
-    @apply -translate-y-1 shadow-lg;
-  }
-
   .focus-ring {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }

@@ -4,31 +4,20 @@
  * creating a typewriter-like reveal effect.
  */
 "use client";
-import { useMemo } from "react";
 import { motion } from "framer-motion";
 
 /** Shared segmenter instance (hoisted to avoid re-creation on every render). */
 const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
 
-export default function MotionText({
-  children,
-  delayOffset = 0,
-}: {
-  children: string;
-  /** Base delay (seconds) added before the per-character stagger begins. */
-  delayOffset: number;
-}) {
-  /** Split the text into grapheme clusters (emoji-safe). */
-  const letters = useMemo(
-    () =>
-      Array.from(segmenter.segment(children), (s) => s.segment).map((ch) =>
-        ch === " " ? "\u00A0" : ch,
-      ),
-    [children],
+export default function MotionText({ children }: { children: string }) {
+  /* Grapheme clusters (emoji-safe). Spaces become NBSP because a lone space
+     in an inline-flex span collapses to zero width. */
+  const letters = Array.from(segmenter.segment(children), ({ segment }) =>
+    segment === " " ? " " : segment,
   );
 
   return (
-    <motion.div>
+    <div>
       {letters.map((letter, index) => (
         <motion.span
           className="inline-flex"
@@ -36,7 +25,7 @@ export default function MotionText({
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{
-            delay: index * 0.02 + delayOffset,
+            delay: index * 0.02,
             type: "spring",
             damping: 15,
             stiffness: 400,
@@ -45,6 +34,6 @@ export default function MotionText({
           {letter}
         </motion.span>
       ))}
-    </motion.div>
+    </div>
   );
 }

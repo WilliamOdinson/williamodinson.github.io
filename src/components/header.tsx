@@ -2,8 +2,6 @@
  * Header: Sticky top navigation bar.
  * Contains the site logo (custom font), nav links, source link, and the dark-mode toggle.
  */
-"use client";
-
 import Link from "next/link";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
@@ -43,7 +41,7 @@ export default function Header() {
         <div className="flex items-center gap-x-4">
           <div className="nav-links flex gap-x-8 font-semibold text-xl">
             {nav.map(({ label, href }) => (
-              <Link key={href} href={href} className="cursor-pointer">
+              <Link key={href} href={href}>
                 {label}
               </Link>
             ))}

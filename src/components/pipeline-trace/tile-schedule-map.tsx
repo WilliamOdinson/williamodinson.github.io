@@ -19,15 +19,14 @@ const LABEL_W = 38;
 const HEAD_H = 20;
 
 export default function TileScheduleMap({
-  mTiles = 16,
-  nTiles = 8,
-  groupSize = 8,
+  mTiles,
+  nTiles,
+  groupSize,
   className,
 }: {
-  mTiles?: number;
-  nTiles?: number;
-  groupSize?: number;
-  /** Replaces the default vertical margin (my-8) when embedded in another widget. */
+  mTiles: number;
+  nTiles: number;
+  groupSize: number;
   className?: string;
 }) {
   const groups = Math.ceil(mTiles / groupSize);
@@ -45,12 +44,7 @@ export default function TileScheduleMap({
 
   return (
     <figure
-      className={cn(
-        "not-prose",
-        className ?? "my-8",
-        styles.tokens,
-        styles.schedule,
-      )}
+      className={cn("not-prose", className, styles.tokens, styles.schedule)}
     >
       <svg
         className={styles.scheduleSvg}

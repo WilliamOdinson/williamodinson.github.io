@@ -8,9 +8,6 @@ import mermaid from "mermaid";
 import { useEffect, useId, useRef } from "react";
 import { useTheme } from "@/components/theme-provider";
 
-/** Module-level counter to guarantee unique render IDs across hot-reloads. */
-let renderCounter = 0;
-
 interface MermaidProps {
   /** The Mermaid diagram definition (e.g. "graph TD; A-->B"). */
   chart: string;
@@ -18,40 +15,29 @@ interface MermaidProps {
 
 export default function Mermaid({ chart }: MermaidProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const stableId = useId().replace(/:/g, "-");
+  const id = `mermaid${useId()}`;
   const { theme } = useTheme();
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
     let cancelled = false;
 
+    // mermaid.render() reuses `id` for the new SVG, so drop the old one first.
+    // Renders run one at a time in mermaid's own queue.
+    el.innerHTML = "";
     mermaid.initialize({
       startOnLoad: false,
       theme: theme === "dark" ? "dark" : "default",
     });
-
-    (async () => {
-      if (!ref.current) return;
-      ref.current.innerHTML = "";
-
-      try {
-        const id = `mermaid${stableId}-${++renderCounter}`;
-        const { svg } = await mermaid.render(id, chart);
-        if (!cancelled && ref.current) {
-          ref.current.innerHTML = svg;
-        }
-      } catch (err) {
-        console.error("Mermaid render error:", err);
-        if (!cancelled && ref.current) {
-          ref.current.innerHTML =
-            '<pre style="color:red;">Mermaid render error</pre>';
-        }
-      }
-    })();
+    mermaid.render(id, chart).then(({ svg }) => {
+      if (!cancelled) el.innerHTML = svg;
+    });
 
     return () => {
       cancelled = true;
     };
-  }, [chart, theme, stableId]);
+  }, [chart, theme, id]);
 
   return <div ref={ref} />;
 }

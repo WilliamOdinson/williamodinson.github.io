@@ -14,15 +14,8 @@
 
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
+import type { PostMeta } from "@/lib/get-posts";
 import { cn } from "@/lib/utils";
-
-type Post = {
-  slug: string;
-  title: string;
-  summary: string;
-  /** ISO date or a Date serialized by RSC; always passed through `new Date()`. */
-  date: string;
-};
 
 /**
  * Cached formatter for "Month DD, YYYY" style dates.
@@ -61,7 +54,7 @@ const rowVariants: Variants = {
 /** Makes an element span, and inherit, the two-column track of the list. */
 const subgrid = "md:col-span-2 md:grid md:grid-cols-subgrid";
 
-export default function PostsList({ items }: { items: Post[] }) {
+export default function PostsList({ items }: { items: PostMeta[] }) {
   return (
     <motion.ul
       className="grid grid-cols-1 gap-y-2 md:grid-cols-[max-content_1fr] md:gap-x-8"
@@ -70,45 +63,37 @@ export default function PostsList({ items }: { items: Post[] }) {
       whileInView="visible"
       viewport={{ once: true, amount: 0.25 }}
     >
-      {items.map((p) => {
-        const date = new Date(p.date);
-        /* Guard against malformed front-matter: Intl.format throws on Invalid Date. */
-        const isValidDate = !Number.isNaN(date.getTime());
-
-        return (
-          <motion.li key={p.slug} variants={rowVariants} className={subgrid}>
-            <Link
-              href={`/blog/${p.slug}`}
-              className={cn(
-                subgrid,
-                /* Bleed the hover surface 1rem past the text edge on both sides
-                   so text stays aligned with the section heading. */
-                "group -mx-4 block rounded-lg px-4 py-4 md:items-baseline",
-                "transition-colors hover:bg-secondary",
-                "focus-ring",
-              )}
+      {items.map((p) => (
+        <motion.li key={p.slug} variants={rowVariants} className={subgrid}>
+          <Link
+            href={`/blog/${p.slug}`}
+            className={cn(
+              subgrid,
+              /* Bleed the hover surface 1rem past the text edge on both sides
+                 so text stays aligned with the section heading. */
+              "group -mx-4 block rounded-lg px-4 py-4 md:items-baseline",
+              "transition-colors hover:bg-secondary",
+              "focus-ring",
+            )}
+          >
+            <time
+              dateTime={p.date.toISOString().slice(0, 10)}
+              className="mb-1 block text-sm tabular-nums text-muted-foreground md:mb-0"
             >
-              <time
-                dateTime={
-                  isValidDate ? date.toISOString().slice(0, 10) : undefined
-                }
-                className="mb-1 block text-sm tabular-nums text-muted-foreground md:mb-0"
-              >
-                {isValidDate ? dateFmt.format(date) : String(p.date)}
-              </time>
+              {dateFmt.format(p.date)}
+            </time>
 
-              <div className="min-w-0">
-                <h3 className="text-balance text-lg font-semibold leading-snug transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 md:text-xl">
-                  {p.title}
-                </h3>
-                <p className="mt-2 line-clamp-2 max-w-prose text-muted-foreground">
-                  {p.summary}
-                </p>
-              </div>
-            </Link>
-          </motion.li>
-        );
-      })}
+            <div className="min-w-0">
+              <h3 className="text-balance text-lg font-semibold leading-snug transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 md:text-xl">
+                {p.title}
+              </h3>
+              <p className="mt-2 line-clamp-2 max-w-prose text-muted-foreground">
+                {p.summary}
+              </p>
+            </div>
+          </Link>
+        </motion.li>
+      ))}
     </motion.ul>
   );
 }

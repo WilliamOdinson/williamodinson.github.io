@@ -17,6 +17,7 @@ import GridBackground from "@/components/grid-background";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/footer";
 import GoatCounterScript from "@/components/goatcounter-script";
+import JsonLd from "@/components/json-ld";
 import { author, site } from "@/lib/site.config.mjs";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -75,37 +76,30 @@ export default function RootLayout({
         {/* Resource discovery links */}
         <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
         <link rel="author" type="text/plain" href="/humans.txt" />
-        <link rel="robots" href="/robots.txt" />
 
         {/* JSON-LD: Person + WebSite structured data for rich search results */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: author.name,
-              url: site.url,
-              image: `${site.url}${author.image.src}`,
-              jobTitle: author.jobTitle,
-              alumniOf: author.education.map((name) => ({
-                "@type": "CollegeOrUniversity",
-                name,
-              })),
-              sameAs: Object.values(author.social),
-            }),
-          }}
+        <JsonLd
+          json={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: author.name,
+            url: site.url,
+            image: `${site.url}${author.image.src}`,
+            jobTitle: author.jobTitle,
+            alumniOf: author.education.map((name) => ({
+              "@type": "CollegeOrUniversity",
+              name,
+            })),
+            sameAs: Object.values(author.social),
+          })}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: site.title,
-              url: site.url,
-            }),
-          }}
+        <JsonLd
+          json={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: site.title,
+            url: site.url,
+          })}
         />
       </head>
 

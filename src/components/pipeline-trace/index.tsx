@@ -1,11 +1,7 @@
 /**
  * PipelineTrace: interactive cycle-by-cycle trace of the nine GEMM kernels from
  * the "GEMM: Tiled to SOTA" chapters. One component, nine scenarios
- * (`step={1 | ... | 9}`); see ./scenarios.
- *
- * Usage in MDX:
- *   import PipelineTrace from "@/components/pipeline-trace";
- *   <PipelineTrace step={8} />
+ * (`step={1 | ... | 9}`); see ./scenarios. StepSwitcher renders one at a time.
  *
  * - One column per cycle; the ruler doubles as a scrubber (click or drag).
  * - Keyboard shortcuts are scoped to the widget: they only fire while focus is
@@ -48,7 +44,6 @@ export default function PipelineTrace({
   className,
 }: {
   step: StepNumber;
-  /** Replaces the default vertical margin (my-8) when embedded in another widget. */
   className?: string;
 }) {
   const scenario = SCENARIOS[step];
@@ -82,24 +77,21 @@ export default function PipelineTrace({
     if (cycle === last) setPlaying(false);
   }, [cycle, last]);
 
-  const jump = useCallback(
-    (c: number) => {
-      setPlaying(false);
-      setCycle(Math.max(0, Math.min(last, c)));
-    },
-    [last],
-  );
+  function jump(c: number) {
+    setPlaying(false);
+    setCycle(Math.max(0, Math.min(last, c)));
+  }
 
-  const toggle = useCallback(() => {
+  function toggle() {
     if (playing) {
       setPlaying(false);
       return;
     }
     if (cycle === last) setCycle(0);
     setPlaying(true);
-  }, [playing, cycle, last]);
+  }
 
-  const reset = useCallback(() => jump(0), [jump]);
+  const reset = () => jump(0);
 
   /* ---- playhead geometry ---- */
 
@@ -143,7 +135,7 @@ export default function PipelineTrace({
     if (!grid) return;
     const observer = new ResizeObserver(() => positionPlayhead());
     observer.observe(grid);
-    document.fonts?.ready.then(positionPlayhead).catch(() => {});
+    document.fonts.ready.then(positionPlayhead);
     return () => observer.disconnect();
   }, [positionPlayhead]);
 
@@ -192,12 +184,7 @@ export default function PipelineTrace({
 
   return (
     <div
-      className={cn(
-        "not-prose",
-        className ?? "my-8",
-        styles.tokens,
-        styles.root,
-      )}
+      className={cn("not-prose", className, styles.tokens, styles.root)}
       tabIndex={-1}
       onKeyDown={onKeyDown}
       aria-label={scenario.label}

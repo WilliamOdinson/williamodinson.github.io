@@ -1,12 +1,9 @@
 /**
- * MotionList: Animated `<ul>` that staggers its children into view.
+ * MotionList: Animated `<ul>` that staggers its children in on mount.
  *
- * @param delayOffset   - Extra delay (seconds) before staggering begins.
- * @param showWhenInView - If true (default), waits until the list scrolls into view.
- *                         Set to false to animate immediately on mount.
+ * @param delayOffset - Extra delay (seconds) before staggering begins.
  */
 "use client";
-import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 const containerVariants = {
@@ -28,33 +25,19 @@ const itemVariants = {
 
 export default function MotionList({
   children,
-  className,
-  delayOffset = 0,
-  showWhenInView = true,
+  delayOffset,
 }: {
   children: React.ReactNode[];
-  className?: string;
-  delayOffset?: number;
-  showWhenInView?: boolean;
+  delayOffset: number;
 }) {
-  /* Shared props for both modes. */
-  const shared = {
-    className: cn("flex gap-4", className),
-    variants: containerVariants,
-    custom: delayOffset,
-    initial: "hidden" as const,
-  };
-
-  /*
-   * When showWhenInView is true, use whileInView so the animation triggers
-   * only when the element enters the viewport.  Otherwise animate on mount.
-   */
-  const animationProps = showWhenInView
-    ? { whileInView: "visible" as const, viewport: { once: true } }
-    : { animate: "visible" as const };
-
   return (
-    <motion.ul {...shared} {...animationProps}>
+    <motion.ul
+      className="flex gap-4"
+      variants={containerVariants}
+      custom={delayOffset}
+      initial="hidden"
+      animate="visible"
+    >
       {children.map((child, i) => (
         <motion.li
           key={i}

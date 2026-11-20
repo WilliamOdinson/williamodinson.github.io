@@ -8,7 +8,7 @@ import PostsList from "@/components/posts-list";
 import MotionDiv from "@/components/motion-div";
 
 export default async function RecentPosts() {
-  const posts = await getAllPosts({ featured: true });
+  const posts = (await getAllPosts()).filter((p) => p.featured);
 
   return (
     <section id="blog-posts" className="my-16 md:my-20">

@@ -1,23 +1,23 @@
 /**
  * Next.js configuration.
  *
- * - Enables MDX page support via @next/mdx with front-matter parsing.
- * - Uses static export (`output: 'export'`) for GitHub Pages deployment.
+ * - Compiles `page.mdx` routes with @next/mdx; the remark plugins turn each
+ *   post's front matter into page metadata and JSON-LD.
+ * - Uses static export (`output: 'export'`); Cloudflare Pages serves `out/`.
  * - Disables image optimization (not available in static export mode).
+ * - Allows this machine's LAN addresses to reach the dev server, for testing
+ *   from other devices.
  */
 const os = require('os')
 const path = require('path')
 
 const withMDX = require('@next/mdx')({
-  extension: /\.mdx?$/,
   options: {
     remarkPlugins: [
       'remark-frontmatter',
-      ['remark-mdx-frontmatter', { name: 'frontMatter' }],
       path.resolve(__dirname, 'src/lib/remark-next-metadata.mjs'),
       path.resolve(__dirname, 'src/lib/remark-json-ld.mjs'),
     ],
-    rehypePlugins: [],
   },
 })
 
@@ -29,6 +29,6 @@ const lanIPs = Object.values(os.networkInterfaces())
 module.exports = withMDX({
   output: 'export',
   images: { unoptimized: true },
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
-  allowedDevOrigins: [...lanIPs, 'localhost'],
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
+  allowedDevOrigins: lanIPs,
 })

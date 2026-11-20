@@ -17,20 +17,19 @@ import {
 
 /** Slide-up / slide-down animation states. */
 const variants = {
-  hidden: { x: 0, y: 100, opacity: 0 },
-  visible: { x: 0, y: 0, opacity: 1 },
+  hidden: { y: 100, opacity: 0 },
+  visible: { y: 0, opacity: 1 },
 };
 
 export default function BackToTop() {
-  const [scrollY, setScrollY] = useState(0);
+  // A boolean, so scrolling re-renders only when the threshold is crossed.
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrollY(window.scrollY);
+    const handler = () => setShow(window.scrollY > 100);
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
-
-  const show = scrollY > 100;
 
   return (
     <AnimatePresence>

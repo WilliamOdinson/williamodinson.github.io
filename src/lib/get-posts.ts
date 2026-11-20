@@ -8,43 +8,37 @@ import path from "path";
 import { promises as fs } from "fs";
 import matter from "gray-matter";
 
+export const BLOG_DIR = path.join(process.cwd(), "src/app/blog");
+
 /** Shape of front-matter metadata extracted from a blog MDX file. */
 export interface PostMeta {
   slug: string;
   title: string;
   summary: string;
-  date: string;      // ISO date string, e.g. "2025-01-15"
-  featured: boolean;  // Whether to show on the homepage
+  /** Front-matter `date` (YYYY-MM-DD), as UTC midnight. */
+  date: Date;
+  /** Shown in the homepage "Blog Posts" section. */
+  featured: boolean;
 }
 
 /**
- * Scan `src/app/blog/` for MDX posts and return their metadata.
+ * Scan `src/app/blog/` for MDX posts and return their metadata, newest first.
  *
  * Posts with `hidden: true` in their front-matter are left out, so they never
- * reach the blog index, the homepage, or the RSS feed (the sitemap applies the
- * same rule in `app/sitemap.xml/route.ts`). Their pages are still built and
- * reachable by URL, marked noindex by `remark-next-metadata`.
- *
- * @param filter - Optional filter; pass `{ featured: true }` to get homepage posts only.
- * @returns Posts sorted by date descending (newest first).
+ * reach the blog index, the homepage, the RSS feed or the sitemap. Their pages
+ * are still built and reachable by URL, marked noindex by
+ * `remark-next-metadata`. Folders starting with `_` are Next.js private
+ * folders: they have no route and are skipped as well.
  */
-export async function getAllPosts(
-  filter?: { featured?: boolean },
-): Promise<PostMeta[]> {
-  const base = path.join(process.cwd(), "src/app/blog");
-  const entries = await fs.readdir(base, { withFileTypes: true });
+export async function getAllPosts(): Promise<PostMeta[]> {
+  const entries = await fs.readdir(BLOG_DIR, { withFileTypes: true });
 
   const scanned = await Promise.all(
     entries
-      // Skip non-directory entries, Next.js dynamic route folders like [slug]
-      // and private folders like _draft, which Next.js never routes to
-      .filter(
-        (e) =>
-          e.isDirectory() && !e.name.startsWith("[") && !e.name.startsWith("_"),
-      )
+      .filter((e) => e.isDirectory() && !e.name.startsWith("_"))
       .map(async (dir) => {
         const raw = await fs.readFile(
-          path.join(base, dir.name, "page.mdx"),
+          path.join(BLOG_DIR, dir.name, "page.mdx"),
           "utf8",
         );
         const { data } = matter(raw);
@@ -52,19 +46,15 @@ export async function getAllPosts(
 
         return {
           slug: dir.name,
-          title: data.title as string,
-          summary: data.summary as string,
-          date: data.date as string,
+          title: data.title,
+          summary: data.summary,
+          date: new Date(data.date),
           featured: Boolean(data.featured),
         } satisfies PostMeta;
       }),
   );
-  const posts = scanned.filter((p): p is PostMeta => p !== null);
 
-  const filtered =
-    filter?.featured !== undefined
-      ? posts.filter((p) => p.featured === filter.featured)
-      : posts;
-
-  return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return scanned
+    .filter((p) => p !== null)
+    .sort((a, b) => b.date.getTime() - a.date.getTime());
 }

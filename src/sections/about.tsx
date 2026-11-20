@@ -47,7 +47,8 @@ export default function About() {
         <MotionDiv delayOffset={0.4}>
           {/* Desktop: 3D tilt card */}
           <CoolPortraitCard className="hidden lg:block">
-            <Image src="/selfie.jpg"
+            <Image
+              src={author.image.src}
               alt={author.image.alt}
               width={350}
               height={438}
@@ -55,7 +56,8 @@ export default function About() {
             />
           </CoolPortraitCard>
           {/* Mobile: simple hover-scale */}
-          <Image src="/selfie.jpg"
+          <Image
+            src={author.image.src}
             alt={author.image.alt}
             width={350}
             height={438}

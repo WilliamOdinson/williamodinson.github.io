@@ -5,7 +5,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { PostMeta } from "@/lib/get-posts";
+import type { PostMeta } from "@/lib/get-posts";
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Search } from "lucide-react";
@@ -69,9 +69,7 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
         </p>
         <label
           htmlFor="search"
-          className={cn(
-            "flex w-fit items-center gap-2 rounded-full bg-secondary px-2 focus-within:outline",
-          )}
+          className="flex w-fit items-center gap-2 rounded-full bg-secondary px-2 focus-within:outline"
         >
           <Search className="h-5 w-5 shrink-0 text-muted-foreground" />
           <input
@@ -90,7 +88,7 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="animated-list flex list-none flex-col"
+        className="flex list-none flex-col"
       >
         {filtered.map((p) => {
           const [head, tail] = splitLastWord(p.title);
@@ -100,7 +98,7 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
               <section className="flex flex-col gap-1 md:flex-row md:gap-9">
                 <div className="flex shrink-0 items-center gap-3 md:w-40">
                   <time className="text-sm text-muted-foreground md:text-base">
-                    {dateFmt.format(new Date(p.date))}
+                    {dateFmt.format(p.date)}
                   </time>
                   <ViewCounter path={`/blog/${p.slug}`} />
                 </div>

@@ -6,14 +6,12 @@
  */
 import { Feed } from "feed";
 import { mdxToHtml } from "./mdx-to-html";
-import { getAllPosts } from "@/lib/get-posts";
+import { BLOG_DIR, getAllPosts } from "@/lib/get-posts";
 import { promises as fs } from "fs";
 import path from "path";
 import { author, site, rss as rssConfig } from "@/lib/site.config.mjs";
 
 export const dynamic = "force-static";
-
-const BLOG_DIR = path.join(process.cwd(), "src/app/blog");
 
 export async function GET() {
   const postMetas = await getAllPosts();
@@ -36,7 +34,9 @@ export async function GET() {
     description: rssConfig.description,
     copyright: `© ${new Date().getFullYear()} ${author.name}`,
     language: site.language,
-    updated: new Date(posts[0]?.date ?? Date.now()),
+    ttl: 60,
+    // Every post can be hidden, which leaves the feed empty.
+    updated: posts[0]?.date ?? new Date(),
     feedLinks: { rss: `${site.url}/feed.xml` },
     author: { name: author.name, link: site.url },
   });
@@ -49,11 +49,9 @@ export async function GET() {
       title: p.title,
       description: p.summary,
       content: p.html,
-      date: new Date(p.date),
+      date: p.date,
     });
   }
-
-  feed.options.ttl = 60;
 
   return new Response(feed.rss2(), {
     headers: { "Content-Type": "application/rss+xml; charset=utf-8" },

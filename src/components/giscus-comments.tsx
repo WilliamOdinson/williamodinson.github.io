@@ -62,13 +62,7 @@ export default function GiscusComments() {
     if (!iframe) return;
 
     iframe.contentWindow?.postMessage(
-      {
-        giscus: {
-          setConfig: {
-            theme: theme === "dark" ? "dark" : "light",
-          },
-        },
-      },
+      { giscus: { setConfig: { theme } } },
       "https://giscus.app",
     );
   }, [theme]);

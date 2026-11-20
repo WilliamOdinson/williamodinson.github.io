@@ -775,8 +775,7 @@
   color: var(--ink);
 }
 .panelClip {
-  position: relative; /* AnimatePresence popLayout positions the leaving panel against this */
-  overflow: hidden; /* clips the leaving panel while the height tweens */
+  overflow: hidden; /* clips the panel while its height tweens */
 }
 .panelInner {
   display: flow-root; /* keeps child margins inside, so offsetHeight is the true height */

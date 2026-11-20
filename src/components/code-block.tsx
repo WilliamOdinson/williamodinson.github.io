@@ -15,34 +15,26 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import oneDark from "react-syntax-highlighter/dist/esm/styles/prism/one-dark";
 import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/one-light";
 
-export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
-  // MDX wraps fenced code in <pre><code className="language-X">…</code></pre>
-  const child = props.children as ReactElement<{
+export default function CodeBlock({
+  children,
+}: React.HTMLAttributes<HTMLPreElement>) {
+  // MDX renders a code fence as <pre><code className="language-X">source</code></pre>;
+  // an empty fence gives a <code> without children.
+  const code = children as ReactElement<{
     className?: string;
-    children: string;
+    children?: string;
   }>;
-
-  /** The raw source code string. */
-  const rawCode =
-    typeof child?.props?.children === "string"
-      ? child.props.children.trimEnd()
-      : "";
-
-  /** Extract the language identifier (e.g. "tsx") from the className. */
-  const langMatch = /language-(\w+)/.exec(child?.props.className ?? "");
-  const language = langMatch ? langMatch[1] : "";
+  const source = (code.props.children ?? "").trimEnd();
+  /** Language identifier (e.g. "tsx") from the className; "" for plain fences. */
+  const language = /language-(\w+)/.exec(code.props.className ?? "")?.[1] ?? "";
 
   const [copied, setCopied] = useState(false);
 
   /** Write code to the system clipboard and flash a "Copied!" state. */
   async function handleCopy() {
-    try {
-      await navigator.clipboard.writeText(rawCode);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch (err) {
-      console.error("Clipboard write failed:", err);
-    }
+    await navigator.clipboard.writeText(source);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }
 
   const { theme } = useTheme();
@@ -53,8 +45,6 @@ export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
       <SyntaxHighlighter
         language={language}
         style={prismTheme}
-        showLineNumbers={false}
-        wrapLines
         customStyle={{
           margin: 0,
           borderRadius: "0.5rem",
@@ -68,7 +58,7 @@ export default function CodeBlock(props: React.HTMLAttributes<HTMLPreElement>) {
           style: { fontFamily: "var(--font-mono), monospace" },
         }}
       >
-        {rawCode}
+        {source}
       </SyntaxHighlighter>
 
       {/* Copy button: styles live in globals.css (.copy-btn) */}

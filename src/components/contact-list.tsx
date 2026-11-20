@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { author } from "@/lib/site.config.mjs";
 
 /** Descriptor for a single contact channel. */
 type Contact = {
@@ -37,26 +38,26 @@ type Contact = {
 /** All social/contact links displayed in the hero section. */
 const contacts: Contact[] = [
   {
-    name: "earthsuperman@outlook.com",
-    href: "mailto:earthsuperman@outlook.com",
+    name: author.email,
+    href: `mailto:${author.email}`,
     icon: faEnvelope,
     color: "text-[#EA4335]",
   },
   {
     name: "X",
-    href: "https://x.com/william18652",
+    href: author.social.twitter,
     icon: faXTwitter,
     color: "text-black dark:text-white",
   },
   {
     name: "GitHub",
-    href: "https://github.com/williamodinson",
+    href: author.social.github,
     icon: faGithub,
     color: "text-[#181717] dark:text-white",
   },
   {
     name: "LinkedIn",
-    href: "https://linkedin.com/in/williamodinson",
+    href: author.social.linkedin,
     icon: faLinkedin,
     color: "text-[#0A66C2]",
   },
@@ -68,20 +69,11 @@ const contacts: Contact[] = [
   },
 ];
 
-/**
- * @param delayOffset  - Extra delay (seconds) before the stagger animation starts.
- * @param showWhenInView - If true, animate only when scrolled into view.
- */
-export default function ContactList({
-  delayOffset = 0,
-  showWhenInView = true,
-}: {
-  delayOffset?: number;
-  showWhenInView?: boolean;
-}) {
+/** @param delayOffset - Extra delay (seconds) before the stagger animation starts. */
+export default function ContactList({ delayOffset }: { delayOffset: number }) {
   return (
     <TooltipProvider delayDuration={0}>
-      <MotionList delayOffset={delayOffset} showWhenInView={showWhenInView}>
+      <MotionList delayOffset={delayOffset}>
         {contacts.map(({ name, href, icon, color }) => (
           <Tooltip key={name}>
             <TooltipTrigger asChild>
@@ -91,7 +83,6 @@ export default function ContactList({
                   "hover:bg-secondary md:h-12 md:w-12",
                 )}
                 asChild
-                aria-label={name}
               >
                 <Link href={href} target="_blank" aria-label={name}>
                   <FontAwesomeIcon icon={icon} className={cn("size-6", color)} />

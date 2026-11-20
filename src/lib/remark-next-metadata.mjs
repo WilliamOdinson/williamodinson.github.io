@@ -1,48 +1,33 @@
 /**
  * remark-next-metadata
  *
- * A remark plugin that reads YAML front-matter from MDX pages and injects a
- * Next.js-compatible `export const metadata = { … }` declaration with full
- * Open Graph, Twitter Card, and canonical URL support.
+ * A remark plugin that reads the YAML front-matter of a blog post
+ * (`src/app/blog/<slug>/page.mdx`) and injects a Next.js
+ * `export const metadata = { … }` declaration.
  *
  * Must run AFTER `remark-frontmatter` (which parses the YAML block into the AST).
- * Uses `gray-matter` (already a project dependency) for YAML parsing.
  *
  * Generated fields:
  *  - title, description, keywords
- *  - openGraph  (title, description, type, siteName, publishedTime, tags, images, url)
+ *  - openGraph  (title, description, type, siteName, url, publishedTime, tags, images)
  *  - alternates (canonical)
  *  - robots     (noindex, nofollow) when the front-matter has `hidden: true`
  */
 import matter from "gray-matter";
 import { author, site } from "./site.config.mjs";
 
-const BASE_URL = site.url;
-
-/* ------------------------------------------------------------------ */
-/*  Minimal valueToEstree (avoids adding estree-util-value-to-estree) */
-/* ------------------------------------------------------------------ */
-
-function valueToEstree(v) {
-  if (v === null || v === undefined) {
-    return { type: "Literal", value: null, raw: "null" };
+/**
+ * ESTree for a JSON-like value. Object properties set to `undefined` are
+ * omitted, which is how optional front-matter fields drop out.
+ */
+function valueToEstree(value) {
+  if (Array.isArray(value)) {
+    return { type: "ArrayExpression", elements: value.map(valueToEstree) };
   }
-  if (typeof v === "string") {
-    return { type: "Literal", value: v, raw: JSON.stringify(v) };
-  }
-  if (typeof v === "number") {
-    return { type: "Literal", value: v, raw: String(v) };
-  }
-  if (typeof v === "boolean") {
-    return { type: "Literal", value: v, raw: String(v) };
-  }
-  if (Array.isArray(v)) {
-    return { type: "ArrayExpression", elements: v.map(valueToEstree) };
-  }
-  if (typeof v === "object") {
+  if (typeof value === "object") {
     return {
       type: "ObjectExpression",
-      properties: Object.entries(v)
+      properties: Object.entries(value)
         .filter(([, val]) => val !== undefined)
         .map(([key, val]) => ({
           type: "Property",
@@ -55,101 +40,55 @@ function valueToEstree(v) {
         })),
     };
   }
-  return { type: "Literal", value: String(v), raw: JSON.stringify(String(v)) };
+  return { type: "Literal", value };
 }
 
-/* ------------------------------------------------------------------ */
-/*  Helpers                                                           */
-/* ------------------------------------------------------------------ */
+/** Build a Next.js Metadata object from a post's front-matter. */
+function buildMetadata(data, url) {
+  const { title, summary: description, tags } = data;
 
-/**
- * Derive the URL pathname from the source VFile path.
- * e.g. ".../src/app/blog/my-post/page.mdx" → "/blog/my-post"
- */
-function urlPathFromFile(vfile) {
-  const filePath = vfile.path || vfile.history?.[0] || "";
-  const match = filePath.match(
-    /src[\\/]app[\\/]((?:blog|projects)[\\/][^\\/]+)[\\/]/,
-  );
-  return match ? `/${match[1].replace(/\\/g, "/")}` : "";
-}
-
-/**
- * Build a Next.js Metadata object from raw front-matter data.
- */
-function buildMetadata(data, urlPath) {
-  // Normalise fields across blog posts (title/summary) and projects (repo/description).
-  const title = data.title || data.repo || "";
-  const description = data.summary || data.description || "";
-
-  const meta = { title, description };
-
-  // OpenGraph
-  meta.openGraph = {
+  return {
     title,
     description,
-    type: "article",
-    siteName: author.name,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      siteName: author.name,
+      url,
+      publishedTime: new Date(data.date).toISOString(),
+      tags,
+      // A page-level openGraph replaces the root layout's entirely, so every
+      // post sets its own image: the cover if given, else the portrait.
+      images: data.cover
+        ? [{ url: data.cover, alt: title }]
+        : [
+            {
+              url: author.image.src,
+              alt: author.image.alt,
+              width: author.image.width,
+              height: author.image.height,
+            },
+          ],
+    },
+    alternates: { canonical: url },
+    // Hidden pages are unlisted everywhere else; keep them out of search results too.
+    robots: data.hidden ? { index: false, follow: false } : undefined,
+    keywords: tags,
   };
-
-  if (urlPath) {
-    const fullUrl = `${BASE_URL}${urlPath}`;
-    meta.openGraph.url = fullUrl;
-    meta.alternates = { canonical: fullUrl };
-  }
-
-  if (data.date) {
-    meta.openGraph.publishedTime = new Date(data.date).toISOString();
-  }
-
-  // Hidden pages are unlisted everywhere else; keep them out of search results too.
-  if (data.hidden) {
-    meta.robots = { index: false, follow: false };
-  }
-
-  // Tags → OG tags + keywords meta
-  const tags = Array.isArray(data.tags) ? data.tags : data.tags ? [data.tags] : [];
-  if (tags.length) {
-    meta.openGraph.tags = tags;
-    meta.keywords = tags;
-  }
-
-  // Cover image, falling back to the portrait. A page-level `openGraph` replaces
-  // the root layout's object entirely, so without a fallback posts would ship
-  // with no og:image at all and social cards would render without a preview.
-  meta.openGraph.images = data.cover
-    ? [{ url: data.cover, alt: title }]
-    : [
-        {
-          url: author.image.src,
-          alt: author.image.alt,
-          width: author.image.width,
-          height: author.image.height,
-        },
-      ];
-
-  return meta;
 }
-
-/* ------------------------------------------------------------------ */
-/*  Plugin                                                            */
-/* ------------------------------------------------------------------ */
 
 export default function remarkNextMetadata() {
   return (tree, vfile) => {
-    /* ---- locate the YAML node created by remark-frontmatter ---- */
-    const yamlNode = tree.children.find((node) => node.type === "yaml");
-    if (!yamlNode) return;
+    const slug = vfile.path.match(/src[\\/]app[\\/]blog[\\/]([^\\/]+)[\\/]/)?.[1];
+    const yamlIndex = tree.children.findIndex((node) => node.type === "yaml");
+    if (!slug || yamlIndex === -1) return;
 
-    /* ---- parse front-matter ---- */
-    const { data } = matter(`---\n${yamlNode.value}\n---`);
-    if (!data || typeof data !== "object") return;
+    const { data } = matter(`---\n${tree.children[yamlIndex].value}\n---`);
+    const metadata = buildMetadata(data, `${site.url}/blog/${slug}`);
 
-    const urlPath = urlPathFromFile(vfile);
-    const meta = buildMetadata(data, urlPath);
-
-    /* ---- build ESTree: export const metadata = { … }; ---- */
-    const exportNode = {
+    /* export const metadata = { … }; right after the YAML node. */
+    tree.children.splice(yamlIndex + 1, 0, {
       type: "mdxjsEsm",
       value: "",
       data: {
@@ -168,7 +107,7 @@ export default function remarkNextMetadata() {
                   {
                     type: "VariableDeclarator",
                     id: { type: "Identifier", name: "metadata" },
-                    init: valueToEstree(meta),
+                    init: valueToEstree(metadata),
                   },
                 ],
               },
@@ -176,10 +115,6 @@ export default function remarkNextMetadata() {
           ],
         },
       },
-    };
-
-    // Insert right after the YAML node so it's early in the module.
-    const yamlIndex = tree.children.indexOf(yamlNode);
-    tree.children.splice(yamlIndex + 1, 0, exportNode);
+    });
   };
 }

@@ -39,8 +39,8 @@ export const rss = {
 /**
  * Résumé visibility. Set `hidden: true` to take /resume.pdf offline:
  *  - the homepage stops rendering the "View My Résumé" button
- *  - the deploy workflow stops injecting the PDF into out/
- *  - functions/resume.pdf.ts answers 404 even if a stale deployment has the file
+ *  - the deploy workflow stops injecting the PDF into out/, so the path
+ *    answers with the site's 404 page
  *
  * Blog posts have the same switch in their front-matter: `hidden: true` keeps
  * a post out of the blog index, the homepage, the sitemap and the RSS feed and

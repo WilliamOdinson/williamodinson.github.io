@@ -37,12 +37,8 @@ function stepFromHash(hash: string): StepNumber | null {
   return m ? (Number(m[1]) as StepNumber) : null;
 }
 
-export default function StepSwitcher({
-  initialStep = 1,
-}: {
-  initialStep?: StepNumber;
-}) {
-  const [step, setStep] = useState<StepNumber>(initialStep);
+export default function StepSwitcher() {
+  const [step, setStep] = useState<StepNumber>(1);
   const scenario = SCENARIOS[step];
   // The clip wrapper is pinned to the measured height of the current panel and
   // tweens to the new height on every change, so content below never jumps.
@@ -82,9 +78,7 @@ export default function StepSwitcher({
 
   function select(s: StepNumber) {
     setStep(s);
-    if (typeof window !== "undefined") {
-      window.history.replaceState(null, "", `#step-${s}`);
-    }
+    window.history.replaceState(null, "", `#step-${s}`);
   }
 
   /** Left/Right move between tabs, as in a WAI-ARIA tablist. */
